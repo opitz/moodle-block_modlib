@@ -26,20 +26,21 @@ class block_modlib extends block_base {
 
 //----------------------------------------------------------------------------------------------------------------------
     function init() {
-        global $PAGE;
-        $PAGE->requires->js_call_amd('block_modlib/test', 'init', array());
         $this->title = get_string('pluginname', 'block_modlib');
     }
 
 //----------------------------------------------------------------------------------------------------------------------
     function get_content() {
-        global $CFG;
+        global $PAGE;
+
+        $PAGE->requires->js_call_amd('block_modlib/install_module', 'init', array());
 
         $this->content = new stdClass;
 //        $this->content->text = 'GNUPF!';
 //        $this->content->text = html_writer::tag('div','Gnupfig', array('class' => 'gnupf'));
         $this->content->text = $this->get_library_modules();
-        $this->content->footer = '<hr>(c) by QMUL 2019';
+//        $this->content->footer = '<hr>(c) by QMUL 2019';
+        $this->content->footer = '';
 
         return $this->content;
     }
@@ -69,18 +70,56 @@ class block_modlib extends block_base {
 
         $o .= html_writer::start_tag('table', array());
         foreach($raw_mods as $raw_mod) {
+            console.log($raw_mod);
             // get the module type
             $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
             // get the module record
             $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
 
-            $o .= html_writer::start_tag('tr', array('class' => 'module '.$module_type->name));
-//            $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: ', array());
+            $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
+            $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'">');
+//            $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" "module_type" => '.$module_type->name.' name="'.$module->name.'">');
+            $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: ', array());
             $o .= html_writer::tag('td', $module->name, array());
             $o .= html_writer::end_tag('tr');
         }
         $o .= html_writer::end_tag('table');
 
+        $o .= $this->build_topics_menu();
+
+        return $o;
+    }
+
+    function build_topics_menu() {
+        global $COURSE, $PAGE;
+        $o = '';
+        // build a drop down menu to select a target topic
+        $course = $this->page->course;
+        $courseformat = course_get_format($course);
+        $coursesections = $courseformat->get_sections();
+
+        $o .= html_writer::empty_tag('hr');
+        $o .= "<form method='post'>";
+
+        // build the commands array
+        $commands = array();
+
+        $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'command', 'class' => 'btn dropdown-toggle btn-primary', 'data-toggle' => 'dropdown'));
+//        $o .= get_string('select_section', 'block_modlib');
+        $o .= 'Select a Topic to install to';
+        $o .= html_writer::end_tag('button');
+
+        $o .= html_writer::start_tag('div', array('class' => 'dropdown-menu modlib-sections'));
+        foreach($coursesections as $section) {
+            $o.= html_writer::tag('a', $section->name, array(
+                'class' => 'dropdown-item',
+                'value' => $section->id
+            ));
+        }
+        $o .= html_writer::end_tag('div');
+
+        $o .= "</form>";
         return $o;
     }
 }
+
