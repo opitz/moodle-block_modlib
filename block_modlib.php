@@ -33,15 +33,18 @@ class block_modlib extends block_base {
     function get_content() {
         global $PAGE;
 
-        $PAGE->requires->js_call_amd('block_modlib/install_module', 'init', array());
+        // only show this when the user is editing
+        if (!$this->page->user_is_editing()) {
+            $this->content = new stdClass;
+            $this->content->text = '';
+            $this->content->footer = '';
+        } else {
+            $PAGE->requires->js_call_amd('block_modlib/install_module', 'init', array());
 
-        $this->content = new stdClass;
-//        $this->content->text = 'GNUPF!';
-//        $this->content->text = html_writer::tag('div','Gnupfig', array('class' => 'gnupf'));
-        $this->content->text = $this->get_library_modules();
-//        $this->content->footer = '<hr>(c) by QMUL 2019';
-        $this->content->footer = '';
-
+            $this->content = new stdClass;
+            $this->content->text = $this->get_library_modules();
+            $this->content->footer = '';
+        }
         return $this->content;
     }
 
@@ -49,10 +52,9 @@ class block_modlib extends block_base {
     function get_library_modules() {
         global $DB;
 
-
-
         // The ID of the 'Templete Course' course
-        $lib_course_id = 15;
+//        $lib_course_id = 15;
+        $lib_course_id = $this->config->template_course;
 
         // The ID of the section 1 of that course since this is the one containing the currently valid library
         $rec = $DB->get_record('course_sections', array('course' => $lib_course_id, 'section' => "1"));
@@ -94,6 +96,7 @@ class block_modlib extends block_base {
         */
     }
 
+//----------------------------------------------------------------------------------------------------------------------
     function render_modules1($raw_mods) {
         global $DB;
         $supported_types = array('book'); // array of yet supported module types
@@ -159,6 +162,7 @@ class block_modlib extends block_base {
         return $o;
     }
 
+//----------------------------------------------------------------------------------------------------------------------
     function build_topics_menu() {
         global $COURSE, $PAGE;
         $o = '';
