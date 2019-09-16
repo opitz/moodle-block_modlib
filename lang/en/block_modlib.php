@@ -38,3 +38,4 @@ $string['privacy:metadata:block'] = 'The module library block stores all of its 
 $string['select_section'] = 'Select Topic to install selected Modules';
 $string['not_supported'] = 'This module type is not supported yet';
 $string['template_course'] = 'Template Course';
+$string['no_selection'] = 'Please select a template';

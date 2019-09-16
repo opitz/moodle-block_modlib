@@ -14,7 +14,7 @@ class block_modlib_edit_form extends block_edit_form {
         $tcourses = $DB->get_records_sql($sql);
 
         $options = array();
-
+        $options[0] = get_string('no_selection', 'block_modlib');
         foreach($tcourses as $tcourse) {
             $options[$tcourse->id] = $tcourse->shortname;
         }

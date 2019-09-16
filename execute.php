@@ -9,8 +9,8 @@ $type = $_POST['type'];
 echo '';
 
 switch ($type) {
-    case 'assignment':
-        echo install_assignment($sectionid, $moduleid);
+    case 'assign':
+        echo install_assign($sectionid, $moduleid);
         break;
     case 'book':
         echo install_book($sectionid, $moduleid);
@@ -50,10 +50,81 @@ switch ($type) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-function install_assignment($sectionid, $moduleid) {
+function get_module_files($moduleid) {
     global $DB;
 
-    return "";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+function set_module_files($files, $moduleid) {
+    global $DB;
+    foreach($files as $file) {
+        // do something here
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+function save_module($courseid = false, $sectionid = false, $moduleid = false, $moduletype = false, $new_instanceid, $target) {
+    global $DB;
+    if(!$courseid || !$sectionid || !$moduleid || !$moduletype) {
+        return false;
+    }
+
+    // get the module type code
+    $type_code = $DB->get_record('modules', array('name' => $moduletype));
+    // now relate the data to the target section
+    $cm = $DB->get_record('course_modules', array('module' => $type_code->id, 'instance' => $moduleid));
+    unset($cm->id);
+    $cm->course = $courseid;
+    $cm->instance = $new_instanceid;
+    $cm->section = $sectionid;
+
+    $cm_id = $DB->insert_record('course_modules', $cm);
+
+    // finally update the module sequence of the target section
+    if($target->sequence === '' || $target->sequence == null) {
+        $target->sequence = $cm_id;
+    } else {
+        $target->sequence .= ','.$cm_id;
+
+    }
+    $DB->update_record('course_sections', $target);
+
+    rebuild_course_cache($courseid, true); // rebuild the cache for that course so the changes become effective
+    return true;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+function install_assign($sectionid, $moduleid) {
+    global $DB;
+    // get the base assign module
+    $assign = $DB->get_record('assign', array('id' => $moduleid));
+    $grade_item = $DB->get_record('grade_items', array('iteminstance' => $assign->id));
+    unset($assign->id);
+
+    // get the target section
+    $target = $DB->get_record('course_sections', array('id' => $sectionid));
+    $courseid = $target->course;
+
+    // Save a new copy of the module
+    $assign->course = $courseid;
+    $new_assign_id = $DB->insert_record('assign', $assign);
+
+    // now save a copy of the grade item too
+    unset($grade_item->id);
+    $grade_item->iteminstance = $new_assign_id;
+    $new_grade_item_id = $DB->insert_record('grade_items', $grade_item);
+
+    // finally save the new module and relate it to the target section
+    save_module($courseid, $sectionid, $moduleid, 'assign', $new_assign_id, $target);
+
+    // get any files related to the assignment module
+    $files = get_module_files($assign->id);
+    if($files) {
+        set_module_files($files, $new_assign_id);
+    }
+
+    return "Assignment $assign->name installed";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -189,37 +260,6 @@ function install_data($sectionid, $moduleid) {
     rebuild_course_cache($courseid, true); // rebuild the cache for that course so the changes become effective
 */
     return "Data $data->name installed";
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-function save_module($courseid = false, $sectionid = false, $moduleid = false, $moduletype = false, $new_instanceid, $target) {
-    global $DB;
-    if(!$courseid || !$sectionid || !$moduleid || !$moduletype) {
-        return false;
-    }
-
-    // get the module type code
-    $type_code = $DB->get_record('modules', array('name' => $moduletype));
-    // now relate the data to the target section
-    $cm = $DB->get_record('course_modules', array('module' => $type_code->id, 'instance' => $moduleid));
-    unset($cm->id);
-    $cm->course = $courseid;
-    $cm->instance = $new_instanceid;
-    $cm->section = $sectionid;
-
-    $cm_id = $DB->insert_record('course_modules', $cm);
-
-    // finally update the module sequence of the target section
-    if($target->sequence === '' || $target->sequence == null) {
-        $target->sequence = $cm_id;
-    } else {
-        $target->sequence .= ','.$cm_id;
-
-    }
-    $DB->update_record('course_sections', $target);
-
-    rebuild_course_cache($courseid, true); // rebuild the cache for that course so the changes become effective
-    return true;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

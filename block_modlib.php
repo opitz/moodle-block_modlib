@@ -68,67 +68,9 @@ class block_modlib extends block_base {
 
         // Show what we found
         return $this->render_modules($raw_mods);
-        /*
-        $o = '';
-//        $o .= html_writer::start_tag('div', '', array());
-//        $o .= html_writer::end_tag('div');
-
-        $o .= html_writer::start_tag('table', array());
-        $supported_types = array('book');
-        foreach($raw_mods as $raw_mod) {
-            // get the module type
-            $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
-            // get the module record
-            $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
-
-            $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
-            $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'">');
-//            $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" "module_type" => '.$module_type->name.' name="'.$module->name.'">');
-            $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: ', array());
-            $o .= html_writer::tag('td', $module->name, array());
-            $o .= html_writer::end_tag('tr');
-        }
-        $o .= html_writer::end_tag('table');
-
-        $o .= $this->build_topics_menu();
-
-        return $o;
-        */
     }
 
 //----------------------------------------------------------------------------------------------------------------------
-    function render_modules1($raw_mods) {
-        global $DB;
-        $supported_types = array('book'); // array of yet supported module types
-
-        $o = '';
-//        $o .= html_writer::start_tag('div', '', array());
-//        $o .= html_writer::end_tag('div');
-
-        foreach($raw_mods as $raw_mod) {
-            $o .= html_writer::start_tag('div', array('class' => 'form-check'));
-            // get the module type
-            $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
-            // get the module record
-            $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
-            $module_name = '<b>'.ucfirst($module_type->name).'</b>: ' . $module->name;
-            $not_supported = "This module type is not yet supported";
-//            $o .= html_writer::checkbox('modlib_item',$module->id,false, $module_name, array('class' => 'module'));
-//            $o .= "";
-            if(in_array($module_type->name, $supported_types)) {
-                $o .= html_writer::empty_tag('input', array('class' => 'form-check-input module', 'type' => 'checkbox', 'value' => $module->id, 'id' => 'module'.$module->id ));
-            } else {
-                $o .= html_writer::empty_tag('input', array('class' => 'form-check-input module', 'type' => 'checkbox', 'value' => $module->id, 'id' => 'module'.$module->id, 'disabled' => "", 'title' => $not_supported));
-            }
-            $o .= html_writer::tag('label', $module_name, array('class' => 'form-check-label', 'for' => 'module'.$module->id));
-
-
-            $o .= html_writer::end_tag('div');
-        }
-
-        $o .= $this->build_topics_menu();
-        return $o;
-    }
     function render_modules($raw_mods) {
         global $DB;
         $o = '';
@@ -136,7 +78,7 @@ class block_modlib extends block_base {
 //        $o .= html_writer::end_tag('div');
 
         $o .= html_writer::start_tag('table', array());
-        $supported_types = array('book', 'data');
+        $supported_types = array('assign', 'book', 'data');
         foreach($raw_mods as $raw_mod) {
             // get the module type
             $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
@@ -194,5 +136,6 @@ class block_modlib extends block_base {
         $o .= "</form>";
         return $o;
     }
+
 }
 
