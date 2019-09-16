@@ -35,6 +35,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                         $('input[class="module"]:checked').each(function() {
                             var module = {};
                             module.id = $(this).val();
+                            module.cmid = $(this).attr('cmid');
                             module.name = $(this).attr('name');
                             module.type = $(this).attr('module_type');
 
@@ -57,13 +58,14 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                             $.ajax({
                                 url: execUrl,
                                 type: "POST",
-                                data: {'sectionid': sectionId, 'moduleid': module.id, 'type': module.type},
+                                data: {'sectionid': sectionId, 'cmid': module.cmid, 'moduleid': module.id, 'type': module.type},
                                 success: function(result) {
                                     if(result !== '') {
-                                        console.log('Execution result:\n' + result);
+                                        console.log('Exxxecution result:\n' + result);
                                     } else {
                                         console.warn('Unsupported module type for installation: ' + module.type + '!\n');
                                     }
+                                    console.log('=====> returnurl = ' + returnurl);
                                     window.location = returnurl;
                                 },
                                 error: function(e) {

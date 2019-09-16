@@ -78,23 +78,16 @@ class block_modlib extends block_base {
 //        $o .= html_writer::end_tag('div');
 
         $o .= html_writer::start_tag('table', array());
-        $supported_types = array('assign', 'book', 'data');
+
         foreach($raw_mods as $raw_mod) {
             // get the module type
             $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
             // get the module record
             $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
 
-            $not_supported = "This module type is not yet supported";
             $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
-            if(in_array($module_type->name, $supported_types)) {
-                $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
-            } else {
-                $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'" title="'.$not_supported.'" disabled> ');
-            }
-//            $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" "module_type" => '.$module_type->name.' name="'.$module->name.'">');
+            $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" cmid ="'.$raw_mod->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
             $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: '.$module->name, array());
-//            $o .= html_writer::tag('td', $module->name, array());
             $o .= html_writer::end_tag('tr');
         }
         $o .= html_writer::end_tag('table');
