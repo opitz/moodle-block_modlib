@@ -32,6 +32,12 @@ if ($ADMIN->fulltree) {
     $description = get_string('templatecategory_desc', 'block_modlib');
     $default = "Modlib Templates";
 
-    $settings->add(new admin_setting_configtext($name, $title, $description, $default));
-//    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+    // get all course categories as options and show a drop down menu
+    $options = array();
+    $categories = $DB->get_records('course_categories', null, '', 'name');
+    foreach($categories as $category) {
+        $options[$category->name] = $category->name;
+    }
+    $settings->add(new admin_setting_configselect($name, $title, $description, 1, $options));
+    //    $settings->add(new admin_setting_configtext($name, $title, $description, $default));
 }
