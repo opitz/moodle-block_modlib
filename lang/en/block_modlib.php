@@ -39,3 +39,7 @@ $string['select_section'] = 'Select Topic to install selected Modules';
 $string['not_supported'] = 'This module type is not supported yet';
 $string['template_course'] = 'Template Course';
 $string['no_selection'] = 'Please select a template';
+$string['please_wait'] = 'Please wait...';
+$string['installed'] = '{$a} installed';
+$string['templatecategory'] = 'Course category for module templates';
+$string['templatecategory_desc'] = 'Courses from this category will be available as module templates';

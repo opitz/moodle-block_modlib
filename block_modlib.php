@@ -24,6 +24,11 @@
 
 class block_modlib extends block_base {
 
+    function has_config() {
+        return true;
+    }
+
+
 //----------------------------------------------------------------------------------------------------------------------
     function init() {
         $this->title = get_string('pluginname', 'block_modlib');
@@ -76,6 +81,14 @@ class block_modlib extends block_base {
         $o = '';
 //        $o .= html_writer::start_tag('div', '', array());
 //        $o .= html_writer::end_tag('div');
+//        $o .= '<div class="modlib-modal" style="display: none;" id="modlib-spinner-modal"><div class="spinner-container"><div style="margin-top: 10px;">' . 'Please wait...' . '</div></div></div>';
+        $o .= '<div class="modlib-modal" style="display: none;" id="modlib-spinner-modal">';
+        $o .= '<div class="spinner-container">';
+        $o .= '<img src="https://localhost/moodle/theme/image.php/boost/core/1569403484/i/loading" class="spinner">';
+        $o .= '<div id="modlib-modal-msg" style="margin-top: 10px;">'.get_string('please_wait', 'block_modlib').'</div>';
+        $o .= '</div></div>';
+//        $o .= '<div class="modlib-modal" id="modlib-spinner-modal"><div class="spinner-container"><div style="margin-top: 10px;">' . 'Please wait...' . '</div></div></div>';
+//        $o .= '<div class="modal-bg" id="modlib-spinner-modal"><div class="spinner-container"><div style="margin-top: 10px;">' . 'Please wait...' . '</div></div></div>';
 
         $o .= html_writer::start_tag('table', array());
 

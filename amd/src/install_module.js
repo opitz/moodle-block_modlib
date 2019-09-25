@@ -8,12 +8,11 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
 
                     // Get the course ID
                     var courseid = $('#courseid').val();
-                    var returnurl = window.location.href;
+//                    var returnurl = window.location.href;
                     var command = $(this).attr('value');
 //                    var confirm = $(this).attr('confirm_txt');
 
                     console.log('course ID = ' + courseid);
-                    console.log('return URL = ' + returnurl);
                     console.log('command = ' + command);
 //                    console.log('confirmation = ' + confirm);
 
@@ -29,9 +28,14 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                                 modal.show();
                             });
                     } else {
+                        $('.modlib-modal').show();
+//                        $('#test_area').show();
+//                        alert('now showing spinner');
+//                        debugger;
                         var sectionId =  $(this).attr('value');
                         var sectionName = $(this).html();
                         console.log('Install into section ' + sectionId + ' -> ' + sectionName);
+                        var count = $('input[class="module"]:checked').length;
                         $('input[class="module"]:checked').each(function() {
                             var module = {};
                             module.id = $(this).val();
@@ -49,7 +53,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                             var baseUrl = pathUrl.split('/');
                             console.log('-----');
                             baseUrl.shift();
-                            execUrl = window.location.protocol + "//" + window.location.host + "/" + baseUrl.shift() +
+                            var execUrl = window.location.protocol + "//" + window.location.host + "/" + baseUrl.shift() +
                                 '/blocks/modlib/execute.php';
                             console.log(execUrl);
                             console.log('-----');
@@ -61,19 +65,27 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                                 data: {'sectionid': sectionId, 'cmid': module.cmid, 'moduleid': module.id, 'type': module.type},
                                 success: function(result) {
                                     if(result !== '') {
-                                        console.log('Exxxecution result:\n' + result);
+                                        console.log('Execution result:\n' + result);
+                                        $('#modlib-modal-msg').html(result);
                                     } else {
                                         console.warn('Unsupported module type for installation: ' + module.type + '!\n');
                                     }
-                                    console.log('=====> returnurl = ' + returnurl);
-                                    window.location = returnurl;
+                                    if (! --count) { // once all
+                                        $('.modlib-modal').hide();
+                                        location.reload();
+                                    }
+//                                    window.location = returnurl;
                                 },
                                 error: function(e) {
+                                    $('.modlib-modal').hide();
                                     console.error(e);
                                 }
                             });
-
                         });
+//                        alert('hiding spinner');
+//                        debugger;
+//                        $('#test_area').hide();
+//                        $('.modlib-modal').hide();
                     }
                 });
             };
@@ -97,7 +109,12 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
             $(document).ready(function() {
                 console.log('=================< modlib/install_module >=================');
                 initFunctions();
+                $('#modlib-spinner-modal').hide();
                 $('tr.module').css('cursor','pointer');
+
+//                $(document).on('click', function() {
+//                    $('.modlib-modal').toggle();
+//                });
             });
         }
     };

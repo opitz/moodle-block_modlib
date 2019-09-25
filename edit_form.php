@@ -10,6 +10,7 @@ class block_modlib_edit_form extends block_edit_form {
 
         // get all courses from the 'Template' category
         $cat_name = 'Templates';
+        $cat_name = get_config('block_modlib', 'templatecategory');
         $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.name = '$cat_name'";
         $tcourses = $DB->get_records_sql($sql);
 

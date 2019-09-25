@@ -15,15 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ *  Module Library
  *
- * @package    block_modlib
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *  @package    block_modlib
+ *  @copyright  2019 (C) QMUL
+ *  @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2019095501;        // The current plugin version (Date: YYYYMMDDXX)
-//$plugin->requires  = 2019051100;        // Requires this Moodle version
-$plugin->component = 'block_modlib';      // Full name of the plugin (used for diagnostics)
+//require_once __DIR__.'/lib/settingslib.php';
+
+if ($ADMIN->fulltree) {
+    $name = 'block_modlib/templatecategory';
+    $title = get_string('templatecategory', 'block_modlib');
+    $description = get_string('templatecategory_desc', 'block_modlib');
+    $default = "Modlib Templates";
+
+    $settings->add(new admin_setting_configtext($name, $title, $description, $default));
+//    $settings->add(new admin_setting_configselect($name, $title, $description, $default, $choices));
+}
