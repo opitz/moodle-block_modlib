@@ -58,7 +58,6 @@ class block_modlib extends block_base {
         global $DB;
 
         // The ID of the 'Templete Course' course
-//        $lib_course_id = 15;
         $lib_course_id = $this->config->template_course;
 
         // The ID of the section 1 of that course since this is the one containing the currently valid library
@@ -79,17 +78,18 @@ class block_modlib extends block_base {
     function render_modules($raw_mods) {
         global $DB;
         $o = '';
-//        $o .= html_writer::start_tag('div', '', array());
-//        $o .= html_writer::end_tag('div');
-//        $o .= '<div class="modlib-modal" style="display: none;" id="modlib-spinner-modal"><div class="spinner-container"><div style="margin-top: 10px;">' . 'Please wait...' . '</div></div></div>';
+        // create a modal dialog that will be shown when installing modules
         $o .= '<div class="modlib-modal" style="display: none;" id="modlib-spinner-modal">';
         $o .= '<div class="spinner-container">';
         $o .= '<img src="https://localhost/moodle/theme/image.php/boost/core/1569403484/i/loading" class="spinner">';
         $o .= '<div id="modlib-modal-msg" style="margin-top: 10px;">'.get_string('please_wait', 'block_modlib').'</div>';
         $o .= '</div></div>';
-//        $o .= '<div class="modlib-modal" id="modlib-spinner-modal"><div class="spinner-container"><div style="margin-top: 10px;">' . 'Please wait...' . '</div></div></div>';
-//        $o .= '<div class="modal-bg" id="modlib-spinner-modal"><div class="spinner-container"><div style="margin-top: 10px;">' . 'Please wait...' . '</div></div></div>';
 
+        // An introduction
+        $o .= html_writer::div(get_string('intro_text', 'block_modlib'));
+        $o .= '<hr>';
+
+        // A table with available modules
         $o .= html_writer::start_tag('table', array());
 
         foreach($raw_mods as $raw_mod) {
@@ -114,6 +114,7 @@ class block_modlib extends block_base {
     function build_topics_menu() {
         global $COURSE, $PAGE;
         $o = '';
+
         // build a drop down menu to select a target topic
         $course = $this->page->course;
         $courseformat = course_get_format($course);
@@ -122,12 +123,9 @@ class block_modlib extends block_base {
         $o .= html_writer::empty_tag('hr');
         $o .= "<form method='post'>";
 
-        // build the commands array
-        $commands = array();
-
-        $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'command', 'class' => 'btn dropdown-toggle btn-primary', 'data-toggle' => 'dropdown'));
-//        $o .= get_string('select_section', 'block_modlib');
-        $o .= 'Select a Topic to install to';
+        $title = get_string('select_section_mouseover', 'block_modlib');
+        $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'target_topic_btn', 'class' => 'btn dropdown-toggle btn-primary disabled', 'data-toggle' => 'dropdown', 'title' => $title));
+        $o .= get_string('select_section', 'block_modlib');
         $o .= html_writer::end_tag('button');
 
         $o .= html_writer::start_tag('div', array('class' => 'dropdown-menu modlib-sections'));

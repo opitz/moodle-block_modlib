@@ -60,6 +60,8 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                     }
                 });
             };
+
+            // the same command but with console logorrhea
             var execute_w_console = function() {
                 $(".modlib-sections .dropdown-item").on('click', function() {
 
@@ -159,6 +161,15 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
             $(document).ready(function() {
                 console.log('=================< modlib/install_module >=================');
                 initFunctions();
+
+                $('.module_row').on('click', function() {
+                    if ($('input[class="module"]:checked').length !== 0) {
+                        $('#target_topic_btn').removeClass('disabled');
+                    } else {
+                        $('#target_topic_btn').addClass('disabled');
+                    }
+                });
+
                 $('#modlib-spinner-modal').hide();
                 $('tr.module').css('cursor','pointer');
             });
