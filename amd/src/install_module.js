@@ -1,4 +1,4 @@
-define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], function($, str, ModalFactory, ModalEvents) {
+define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], function($, str, ModalFactory) {
     return {
         init: function() {
 
@@ -46,10 +46,9 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                                             console.warn('Unsupported module type for installation: ' + module.type + '!\n');
                                         }
                                         if (! --count) { // once all
-                                            $('.modlib-modal').hide();
+//                                            $('.modlib-modal').hide();
                                             location.reload();
                                         }
-//                                    window.location = returnurl;
                                     },
                                     error: function(e) {
                                         $('.modlib-modal').hide();

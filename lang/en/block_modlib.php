@@ -46,3 +46,4 @@ $string['please_wait'] = 'Please wait...';
 $string['installed'] = '{$a} installed';
 $string['templatecategory'] = 'Course category for module templates';
 $string['templatecategory_desc'] = 'Courses from this category will be available as module templates';
+$string['generic_sectionname'] = 'Topic';

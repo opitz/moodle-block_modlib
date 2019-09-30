@@ -130,7 +130,12 @@ class block_modlib extends block_base {
 
         $o .= html_writer::start_tag('div', array('class' => 'dropdown-menu modlib-sections'));
         foreach($coursesections as $section) {
-            $o.= html_writer::tag('a', $section->name, array(
+            if($section->name == '') {
+                $section_name = get_string('generic_sectionname', 'block_modlib') . ' ' . $section->section;
+            } else {
+                $section_name = $section->name .' ('.get_string('generic_sectionname', 'block_modlib') . ' ' . $section->section .')';
+            }
+            $o.= html_writer::tag('a', $section_name, array(
                 'class' => 'dropdown-item',
                 'value' => $section->id
             ));
