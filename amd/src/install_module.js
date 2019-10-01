@@ -47,7 +47,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                                         }
                                         if (! --count) { // once all
 //                                            $('.modlib-modal').hide();
-//                                            location.reload();
+                                            location.reload();
                                         }
                                     },
                                     error: function(e) {
