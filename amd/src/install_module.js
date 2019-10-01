@@ -31,9 +31,9 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                             var pathUrl = window.location.pathname;
                             var baseUrl = pathUrl.split('/');
                             baseUrl.shift();
-                            var execUrl = window.location.protocol + "//" + window.location.host + "/" + baseUrl.shift() +
-                                '/blocks/modlib/execute.php';
-
+//                            var execUrl = window.location.protocol + "//" + window.location.host + "/" + baseUrl.shift() +
+//                                '/blocks/modlib/execute.php';
+                            var execUrl = '../blocks/modlib/execute.php';
                             baseUrl =
                                 $.ajax({
                                     url: execUrl,
@@ -47,7 +47,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/modal_events'], functi
                                         }
                                         if (! --count) { // once all
 //                                            $('.modlib-modal').hide();
-                                            location.reload();
+//                                            location.reload();
                                         }
                                     },
                                     error: function(e) {
