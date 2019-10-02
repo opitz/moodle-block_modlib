@@ -100,18 +100,19 @@ class block_modlib extends block_base {
 
 //----------------------------------------------------------------------------------------------------------------------
     function render_modules($sections) {
-        global $DB;
+        global $CFG, $DB;
         $o = '';
         // create a modal dialog that will be shown when installing modules
-        $o .= '<div class="modlib-modal" style="display: none;" id="modlib-spinner-modal">';
-        $o .= '<div class="spinner-container">';
+        $o .= html_writer::start_tag('div',array('id' => 'modlib-spinner-modal', 'class' => 'modlib-modal', 'style' => 'display: none;'));
+        $o .= html_writer::start_tag('div', array('class' => 'spinner-container'));
         $o .= '<img src="https://localhost/moodle/theme/image.php/boost/core/1569403484/i/loading" class="spinner">';
-        $o .= '<div id="modlib-modal-msg" style="margin-top: 10px;">'.get_string('please_wait', 'block_modlib').'</div>';
-        $o .= '</div></div>';
+        $o .= html_writer::tag('div',get_string('please_wait', 'block_modlib'), array('id' => 'modlib-modal-msg', 'style' => 'margin-top: 10px;'));
+        $o .= html_writer::end_div();
+        $o .= html_writer::end_div();
 
         // An introduction
         $o .= html_writer::div(get_string('intro_text', 'block_modlib'));
-        $o .= '<hr>';
+        $o .= html_writer::empty_tag('hr');
 
         // A table with available modules
         $o .= html_writer::start_tag('table', array());
