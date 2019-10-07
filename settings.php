@@ -34,7 +34,7 @@ if ($ADMIN->fulltree) {
 
     // get all course categories as options and show a drop down menu
     $options = array();
-    $categories = $DB->get_records('course_categories', null, '', 'name');
+    $categories = $DB->get_records('course_categories', null, 'name', 'name');
     foreach($categories as $category) {
         $options[$category->name] = $category->name;
     }
