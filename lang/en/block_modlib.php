@@ -37,8 +37,10 @@ $string['privacy:metadata:block'] = 'The module library block stores all of its 
 
 $string['intro_text'] = 'Select one or more modules from the library and then choose the topic to install.';
 
-$string['select_section'] = 'Select a topic for installation';
+$string['select_section'] = 'Select a topic to install into';
+$string['select_section_after'] = 'Select a topic to install after';
 $string['select_section_mouseover'] = 'Select a topic where selected modules will be installed';
+$string['select_section_after_mouseover'] = 'Select a topic AFTER which the selected topic(s) will be installed';
 $string['not_supported'] = 'This module type is not supported yet';
 $string['template_course'] = 'Template Course';
 $string['no_selection'] = 'Please select a template';

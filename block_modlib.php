@@ -57,7 +57,7 @@ class block_modlib extends block_base {
     function get_library_modules() {
         global $DB;
 
-        // The ID of the 'Templete Course' course
+        // The ID of the 'Template Course' course
         $lib_course_id = $this->config->template_course;
 
         $result = array();
@@ -123,12 +123,13 @@ class block_modlib extends block_base {
                 continue;
             }
             // get the section name
-            $o .= html_writer::start_tag('tr', array('sectionid' => $section->id));
+            $o .= html_writer::start_tag('tr', array('class' => 'template_section', 'sectionid' => $section->id));
             if($section->name == '') {
                 $section_name = get_string('generic_sectionname', 'block_modlib') . ' '. $section->section;
             } else {
                 $section_name = $section->name;
             }
+            $o .= html_writer::tag('td', '<input type="checkbox" class="template_section" value="'.$section->section.'" sid ="'.$section->id.'" name="'.$section_name.'"> ');
             $o .= html_writer::tag('th', $section_name, array('colspan' => '3'));
             $o .= html_writer::end_tag('tr');
             foreach($section->modules as $raw_mod) {
@@ -139,7 +140,7 @@ class block_modlib extends block_base {
 
                 $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
                 $o .= html_writer::tag('td', '&nbsp;');
-                $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" cmid ="'.$raw_mod->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
+                $o .= html_writer::tag('td', '<input type="checkbox" class="template_module" sid="'.$section->id.'" value="'.$module->id.'" cmid ="'.$raw_mod->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
                 $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: '.$module->name, array());
                 $o .= html_writer::end_tag('tr');
             }
@@ -197,6 +198,11 @@ class block_modlib extends block_base {
 
         $o .= html_writer::empty_tag('hr');
         $o .= "<form method='post'>";
+
+        $title = get_string('select_section_after_mouseover', 'block_modlib');
+        $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'after_topic_btn', 'class' => 'btn dropdown-toggle btn-primary disabled', 'data-toggle' => 'dropdown', 'title' => $title, 'style' => 'display: none;'));
+        $o .= get_string('select_section_after', 'block_modlib');
+        $o .= html_writer::end_tag('button');
 
         $title = get_string('select_section_mouseover', 'block_modlib');
         $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'target_topic_btn', 'class' => 'btn dropdown-toggle btn-primary disabled', 'data-toggle' => 'dropdown', 'title' => $title));
