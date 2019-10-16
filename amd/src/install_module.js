@@ -38,29 +38,19 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             var executeModules = function (self) {
 //                    alert('heda!');
                 // Get the selected modules
-                if ($('input[class="template_module"]:checked').length === 0) {
-                    ModalFactory.create({
-                        //type: ModalFactory.types.SAVE_CANCEL,
-                        type: ModalFactory.types.CANCEL,
-                        title: 'No Module selected',
-                        body: 'Please select at least one module to install.',
-                    })
-                        .then(function (modal) {
-                            modal.show();
-                        });
-                } else {
-                    $('.modlib-modal').show();
-                    var sectionId = self.attr('value');
-console.log(self);
-alert('sectionId = ' + sectionId);
-                    var count = $('input[class="template_module"]:checked').length;
+                $('.modlib-modal').show();
+//                    var sectionId = self.attr('value');
+//                    var count = $('input[class="template_module"]:checked').length;
                     $('input[class="template_module"]:checked').each(function () {
                         var module = {};
-                        module.id = self.val();
-                        module.cmid = self.attr('value');
-                        module.name = self.attr('name');
-                        module.type = self.attr('module_type');
+//                        module.id = $(this).val();
+                        module.sectionid = self.attr('value');
+                        module.cmid = $(this).attr('cmid');
+                        module.name = $(this).attr('name');
+                        module.type = $(this).attr('module_type');
 
+                        callAjax(module);
+                        /*
                         // Now install the module
                         var execUrl = config.wwwroot + '/blocks/modlib/execute.php';
                         $.ajax({
@@ -69,7 +59,6 @@ alert('sectionId = ' + sectionId);
                             data: {
                                 'sectionid': sectionId,
                                 'cmid': module.cmid,
-                                'moduleid': module.id,
                                 'type': module.type
                             },
                             success: function (result) {
@@ -84,13 +73,34 @@ alert('sectionId = ' + sectionId);
                                 console.error(e);
                             }
                         });
+                        */
                     });
-                }
             };
 
 // ---------------------------------------------------------------------------------------------------------------------
-            var execute = function () {
+            var executeSections = function(self) {
+                $('.modlib-modal').show(); // Show the graphical interlude...
+                var targetSectionId = self.attr('value');
+//                        var count = $('input[class="template_section"]:checked').length;
+                $('input[class="template_section"]:checked').each(function () {
+                    var section = {};
+                    section.id = $(this).attr('sid');
+                    section.name = $(this).attr('name');
+
+                    // Now install the module
+                    var data = {};
+                    data.sectionid = targetSectionId;
+                    data.cmid = section.id;
+                    data.type = 'section';
+
+                    callAjax(data);
+                });
+            }
+// ---------------------------------------------------------------------------------------------------------------------
+            var execute0 = function () {
                 $(".modlib-sections .dropdown-item").on('click', function () {
+
+//                    $('.modlib-modal').show(); // Show the graphical interlude...
 
                     // Get the selected sections
                     if ($('input[class="template_section"]:checked').length === 0) {
@@ -99,7 +109,7 @@ alert('sectionId = ' + sectionId);
                     } else {
                         $('.modlib-modal').show(); // Show the graphical interlude...
                         var targetSectionId = $(this).attr('value');
-                        var count = $('input[class="template_section"]:checked').length;
+//                        var count = $('input[class="template_section"]:checked').length;
                         $('input[class="template_section"]:checked').each(function () {
                             var section = {};
                             section.id = $(this).attr('sid');
@@ -110,7 +120,9 @@ alert('sectionId = ' + sectionId);
                             data.sectionid = targetSectionId;
                             data.cmid = section.id;
                             data.type = 'section';
-                            
+
+                            callAjax(data);
+                            /*
                             var execUrl = config.wwwroot + '/blocks/modlib/execute.php';
                             $.ajax({
                                 url: execUrl,
@@ -132,7 +144,22 @@ alert('sectionId = ' + sectionId);
                                     console.error(e);
                                 }
                             });
+                            */
                         });
+                    }
+                });
+            };
+            var execute = function () {
+                $(".modlib-sections .dropdown-item").on('click', function () {
+
+//                    $('.modlib-modal').show(); // Show the graphical interlude...
+
+                    // Get the selected sections
+                    if ($('input[class="template_section"]:checked').length === 0) {
+                        // No sections have been selected - on to single modules
+                        executeModules($(this));
+                    } else {
+                        executeSections($(this));
                     }
                 });
             };

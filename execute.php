@@ -4,7 +4,6 @@ include_once ('../../course/lib.php');
 
 $sectionid = $_POST['sectionid'];
 $cmid = $_POST['cmid'];
-$moduleid = $_POST['moduleid'];
 $type = $_POST['type'];
 
 if($type == 'section') {
@@ -26,6 +25,7 @@ function add_section($course, $t_section) {
     return $section;
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 function install_section($target_sid, $template_sid) {
     global $CFG, $DB, $USER;
 
