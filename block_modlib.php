@@ -199,11 +199,6 @@ class block_modlib extends block_base {
         $o .= html_writer::empty_tag('hr');
         $o .= "<form method='post'>";
 
-        $title = get_string('select_section_after_mouseover', 'block_modlib');
-        $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'after_topic_btn', 'class' => 'btn dropdown-toggle btn-primary disabled', 'data-toggle' => 'dropdown', 'title' => $title, 'style' => 'display: none;'));
-        $o .= get_string('select_section_after', 'block_modlib');
-        $o .= html_writer::end_tag('button');
-
         $title = get_string('select_section_mouseover', 'block_modlib');
         $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'target_topic_btn', 'class' => 'btn dropdown-toggle btn-primary disabled', 'data-toggle' => 'dropdown', 'title' => $title));
         $o .= get_string('select_section', 'block_modlib');
