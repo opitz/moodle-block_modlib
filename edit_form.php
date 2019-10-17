@@ -23,7 +23,8 @@ class block_modlib_edit_form extends block_edit_form {
         $mform->addHelpButton('test', 'tests', 'block');
 
 
-        $mform->setDefault('config_text', 'default value');
+//        $mform->setDefault('config_text', 'default value');
+        $mform->setDefault('config_text', get_config('block_modlib', 'defaulttemplate'));
         $mform->setType('config_text', PARAM_RAW);
 
     }

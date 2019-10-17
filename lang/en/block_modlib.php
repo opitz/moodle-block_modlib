@@ -35,7 +35,7 @@ $string['pluginname'] = 'Module Library';
 $string['search:content'] = 'Module library block content';
 $string['privacy:metadata:block'] = 'The module library block stores all of its data within the block subsystem.';
 
-$string['intro_text'] = 'Select one or more modules from the library and then choose the topic to install.';
+$string['intro_text'] = 'Check one or more modules <i>or</i> one or more entire topics from the library and then select the topic to install. Modules will be installed <b>into</b> the selected topic while entire topics will be installed <b>after</b> it.';
 
 $string['select_section'] = 'Select a topic to install into';
 $string['select_section_after'] = 'Select a topic to install after';
@@ -48,4 +48,7 @@ $string['please_wait'] = 'Please wait...';
 $string['installed'] = '{$a} installed';
 $string['templatecategory'] = 'Course category for module templates';
 $string['templatecategory_desc'] = 'Courses from this category will be available as module templates';
+$string['notemplate'] = 'Select Template Course';
+$string['defaulttemplate'] = 'Default Template Course';
+$string['defaulttemplate_desc'] = 'The template course that will be used by default when the Module Library block is installed.';
 $string['generic_sectionname'] = 'Topic';
