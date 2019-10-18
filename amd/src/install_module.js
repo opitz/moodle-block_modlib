@@ -63,7 +63,6 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     }
                 });
             };
-
 // ---------------------------------------------------------------------------------------------------------------------
             var executeSections = function(sectionId) {
                 // Get the selected sections
@@ -100,7 +99,6 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     }
                 });
             };
-
 // ---------------------------------------------------------------------------------------------------------------------
             var callAjax = function(data) {
                 var execUrl = config.wwwroot + '/blocks/modlib/execute.php';
@@ -130,7 +128,6 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
 
 // _____________________________________________________________________________________________________________________
             $(document).ready(function () {
-//                console.log('=================< modlib/install_module >=================');
                 initFunctions();
 
                 $('#modlib-spinner-modal').hide();

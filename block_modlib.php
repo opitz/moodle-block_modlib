@@ -61,12 +61,8 @@ class block_modlib extends block_base {
         $lib_course_id = $this->config->template_course;
 
         if(!$lib_course_id) {
-            $defaulttemplatename = get_config('block_modlib', 'defaulttemplate');
-            if($defaulttemplatename) {
-                $lib_course = $DB->get_record('course', array('fullname' => $defaulttemplatename));
-                $lib_course_id = $lib_course->id;
-            }
-        }
+            $lib_course_id = get_config('block_modlib', 'defaulttemplate');
+         }
 
         $result = array();
         // The ID of the sections of that course

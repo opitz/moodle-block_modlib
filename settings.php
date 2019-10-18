@@ -34,25 +34,24 @@ if ($ADMIN->fulltree) {
 
     // get all course categories as options and show a drop down menu
     $options = array();
-    $categories = $DB->get_records('course_categories', null, 'name', 'name');
+    $categories = $DB->get_records('course_categories', null, 'name');
     foreach($categories as $category) {
-        $options[$category->name] = $category->name;
+        $options[$category->id] = $category->name;
     }
     $settings->add(new admin_setting_configselect($name, $title, $description, 1, $options));
-    //    $settings->add(new admin_setting_configtext($name, $title, $description, $default));
     if(isset($category)){
         $name = 'block_modlib/defaulttemplate';
         $title = get_string('defaulttemplate', 'block_modlib');
         $description = get_string('defaulttemplate_desc', 'block_modlib');
-        $default = get_string('notemplate', 'block_modlib');
+        $default = 0;
 
-        // get all course categories as options and show a drop down menu
+        // get all courses from the selected template course category as options and show a drop down menu
         $options = array();
-        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.name = '$category->name'";
+        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.id = '$category->id'";
         $tcourses = $DB->get_records_sql($sql);
         $options[$default] = '';
         foreach($tcourses as $tcourse) {
-            $options[$tcourse->fullname] = $tcourse->fullname;
+            $options[$tcourse->id] = $tcourse->fullname;
         }
         $settings->add(new admin_setting_configselect($name, $title, $description, $default, $options));
     }

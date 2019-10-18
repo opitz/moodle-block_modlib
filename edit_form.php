@@ -10,8 +10,8 @@ class block_modlib_edit_form extends block_edit_form {
 
         // get all courses from the 'Template' category
         $cat_name = 'Templates';
-        $cat_name = get_config('block_modlib', 'templatecategory');
-        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.name = '$cat_name'";
+        $catid = get_config('block_modlib', 'templatecategory');
+        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.id = '$catid'";
         $tcourses = $DB->get_records_sql($sql);
 
         $options = array();
@@ -24,8 +24,8 @@ class block_modlib_edit_form extends block_edit_form {
 
 
 //        $mform->setDefault('config_text', 'default value');
-        $mform->setDefault('config_text', get_config('block_modlib', 'defaulttemplate'));
-        $mform->setType('config_text', PARAM_RAW);
+        $mform->setDefault('config_template_course', get_config('block_modlib', 'defaulttemplate'));
+        $mform->setType('config_template_course', PARAM_RAW);
 
     }
 }
