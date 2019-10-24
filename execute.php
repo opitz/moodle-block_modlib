@@ -37,6 +37,8 @@ function install_section($target_sid, $template_sid, $type) {
     $pre_section = $DB->get_record('course_sections', array('id' => $target_sid));
     $courseid = $pre_section->course;
     $course = $DB->get_record('course', array('id' => $courseid));
+    $keeptempdirectoriesonbackup = $CFG->keeptempdirectoriesonbackup;
+    $CFG->keeptempdirectoriesonbackup = true;
 
     // add a copy of the template section at the end
     $t_section = $DB->get_record('course_sections', array('id' => $template_sid));
@@ -84,9 +86,8 @@ function install_section($target_sid, $template_sid, $type) {
 
     // move the new section to the desired position
     move_section_to($course, $target_section->section, $pre_section->section+1);
-
-
-
+    
+    $CFG->keeptempdirectoriesonbackup = $keeptempdirectoriesonbackup;
 
     rebuild_course_cache($courseid, true); // rebuild the cache for that course so the changes become effective
 
