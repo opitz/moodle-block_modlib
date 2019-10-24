@@ -35,8 +35,10 @@ $string['pluginname'] = 'Course Creation Tool';
 $string['search:content'] = 'Module library block content';
 $string['privacy:metadata:block'] = 'The module library block stores all of its data within the block subsystem.';
 
-$string['intro_text'] = 'Check one or more modules <i>or</i> one or more entire topics from the library and then select the topic to install. Modules will be installed <b>into</b> the selected topic while entire topics will be installed <b>after</b> it.';
+$string['intro_text0'] = 'Check one or more modules <i>or</i> one or more entire topics from the library and then select the topic to install. Modules will be installed <b>into</b> the selected topic while entire topics will be installed <b>after</b> it.';
+$string['intro_text'] = 'Select one or more activities <i>or</i> one or more entire topics from the library and then select the topic it should be installed into. (Note: entire topics will be added <i>after</i> the selected target topic)';
 
+$string['no_library'] = 'No Template selected! Please click on the cogwheel to configure the block.';
 $string['select_section'] = 'Select a topic to install into';
 $string['select_section_after'] = 'Select a topic to install after';
 $string['select_section_mouseover'] = 'Select a topic where selected modules will be installed';

@@ -76,30 +76,11 @@ class block_modlib extends block_base {
         }
 
         if(sizeof($sections) == 0) {
-            return "No library found!";
+            return get_string('no_library', 'block_modlib');
         }
 
         // Show what we found
         return $this->render_modules($result);
-    }
-    function get_library_modules0() {
-        global $DB;
-
-        // The ID of the 'Templete Course' course
-        $lib_course_id = $this->config->template_course;
-
-        // The ID of the section 1 of that course since this is the one containing the currently valid library
-        $rec = $DB->get_record('course_sections', array('course' => $lib_course_id, 'section' => "1"));
-        $libsec_id = $rec->id;
-
-        // get the modules
-        $raw_mods = $DB->get_records('course_modules', array('course' => $lib_course_id, 'section' => $libsec_id));
-        if(sizeof($raw_mods) == 0) {
-            return "No library found!";
-        }
-
-        // Show what we found
-        return $this->render_modules($raw_mods);
     }
 
 //----------------------------------------------------------------------------------------------------------------------

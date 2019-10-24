@@ -86,7 +86,7 @@ function install_section($target_sid, $template_sid, $type) {
 
     // move the new section to the desired position
     move_section_to($course, $target_section->section, $pre_section->section+1);
-    
+
     $CFG->keeptempdirectoriesonbackup = $keeptempdirectoriesonbackup;
 
     rebuild_course_cache($courseid, true); // rebuild the cache for that course so the changes become effective
@@ -111,8 +111,6 @@ function install_module($sectionid, $cmid, $type) {
     // Backup the activity.
     $bc = new backup_controller(backup::TYPE_1ACTIVITY, $cmid, backup::FORMAT_MOODLE,
         backup::INTERACTIVE_NO, backup::MODE_GENERAL, $USER->id);
-//    $bc = new backup_controller(backup::TYPE_1ACTIVITY, $cmid, backup::FORMAT_MOODLE,
-//        backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id);
 
     $backupid       = $bc->get_backupid();
     $backupbasepath = $bc->get_plan()->get_basepath();
@@ -123,8 +121,6 @@ function install_module($sectionid, $cmid, $type) {
     // Restore the backup immediately.
     $rc = new restore_controller($backupid, $course->id,
         backup::INTERACTIVE_NO, backup::MODE_GENERAL, $USER->id, backup::TARGET_CURRENT_ADDING);
-//    $rc = new restore_controller($backupid, $course->id,
-//        backup::INTERACTIVE_NO, backup::MODE_IMPORT, $USER->id, backup::TARGET_CURRENT_ADDING);
 
     // Make sure that the restore_general_groups setting is always enabled when duplicating an activity.
     $plan = $rc->get_plan();
