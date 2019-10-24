@@ -39,7 +39,8 @@ if ($ADMIN->fulltree) {
         $options[$category->id] = $category->name;
     }
     $settings->add(new admin_setting_configselect($name, $title, $description, 1, $options));
-    if(isset($category)){
+    $template_cat_id = get_config('block_modlib', 'templatecategory');
+    if(isset($template_cat_id) && $template_cat_id > 0){
         $name = 'block_modlib/defaulttemplate';
         $title = get_string('defaulttemplate', 'block_modlib');
         $description = get_string('defaulttemplate_desc', 'block_modlib');
@@ -47,7 +48,7 @@ if ($ADMIN->fulltree) {
 
         // get all courses from the selected template course category as options and show a drop down menu
         $options = array();
-        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.id = '$category->id'";
+        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.id = '$template_cat_id'";
         $tcourses = $DB->get_records_sql($sql);
         $options[$default] = '';
         foreach($tcourses as $tcourse) {

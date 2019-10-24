@@ -31,7 +31,7 @@ $string['configtitle'] = 'Module library block title';
 $string['html:addinstance'] = 'Add a new module library block';
 $string['html:myaddinstance'] = 'Add a new module library block to Dashboard';
 $string['newhtmlblock'] = 'Module Library';
-$string['pluginname'] = 'Module Library';
+$string['pluginname'] = 'Course Creation Tool';
 $string['search:content'] = 'Module library block content';
 $string['privacy:metadata:block'] = 'The module library block stores all of its data within the block subsystem.';
 
