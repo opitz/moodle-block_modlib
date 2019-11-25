@@ -44,7 +44,7 @@ class block_modlib extends block_base {
             $this->content->text = '';
             $this->content->footer = '';
         } else {
-            $PAGE->requires->js_call_amd('block_modlib/install_module', 'init', array());
+            $PAGE->requires->js_call_amd('block_modlib/install_templates', 'init', array());
 
             $this->content = new stdClass;
             $this->content->text = $this->get_library_modules();

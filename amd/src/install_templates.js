@@ -48,41 +48,41 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             };
 // ---------------------------------------------------------------------------------------------------------------------
             var executeModules = function (sectionId) {
-                var count = $('input[class="template_module"]:checked').length;
                 // Get the selected modules
+                var modules = [];
                 $('input[class="template_module"]:checked').each(function () {
                     var module = {};
                     module.sectionid = sectionId;
                     module.cmid = $(this).attr('cmid');
                     module.name = $(this).attr('name');
                     module.type = $(this).attr('module_type');
-
-                    callAjax(module);
-                    if (!--count) { // once all modules have been installed reload the page
-                        location.reload();
-                    }
+                    modules.push(module);
                 });
+                // Now install the modules
+                var data = {};
+                data.sectionid = sectionId; // The section into which..
+                data.type = 'modules';
+                data.payload = modules;
+
+                callAjax(data);
             };
 // ---------------------------------------------------------------------------------------------------------------------
             var executeSections = function(sectionId) {
                 // Get the selected sections
-                var count = $('input[class="template_section"]:checked').length;
+                var sections = [];
                 $('input[class="template_section"]:checked').each(function () {
                     var section = {};
                     section.id = $(this).attr('sid');
                     section.name = $(this).attr('name');
-
-                    // Now install the module
-                    var data = {};
-                    data.sectionid = sectionId;
-                    data.cmid = section.id;
-                    data.type = 'section';
-
-                    callAjax(data);
-                    if (!--count) { // once all sections have been installed reload the page
-                        location.reload();
-                    }
+                    sections.push(section);
                 });
+                // Now install the sections
+                var data = {};
+                data.sectionid = sectionId; // The section after which...
+                data.type = 'sections';
+                data.payload = sections;
+
+                callAjax(data);
             }
 // ---------------------------------------------------------------------------------------------------------------------
             var execute = function () {
@@ -101,17 +101,20 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             };
 // ---------------------------------------------------------------------------------------------------------------------
             var callAjax = function(data) {
-                var execUrl = config.wwwroot + '/blocks/modlib/execute.php';
+
+                var execUrl = config.wwwroot + '/blocks/modlib/ajax/install_templates.php';
                 $.ajax({
                     url: execUrl,
                     type: "POST",
                     data: {
                         'sectionid': data.sectionid,
-                        'cmid': data.cmid,
-                        'type': data.type
+                        'type': data.type,
+                        'payload': data.payload
                     },
                     success: function (result) {
                         $('#modlib-modal-msg').html(result);
+                        // reload the page
+                        location.reload();
                     },
                     error: function (e) {
                         $('.modlib-modal').hide();
