@@ -88,7 +88,7 @@ class block_modlib extends block_base {
         global $CFG, $DB;
         $o = '';
         // create a modal dialog that will be shown when installing modules
-        $o .= html_writer::start_tag('div',array('id' => 'modlib-spinner-modal', 'class' => 'modlib-modal', 'style' => 'display: show;'));
+        $o .= html_writer::start_tag('div',array('id' => 'modlib-spinner-modal', 'class' => 'modlib-modal', 'style' => 'display: none;'));
         $o .= html_writer::start_tag('div', array('class' => 'spinner-container'));
 //        $spinurl = $CFG->wwwroot.'/blocks/modlib/img/spinner.gif';
         $spinurl = $CFG->wwwroot.'/blocks/modlib/img/tapping.gif';
