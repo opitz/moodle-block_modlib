@@ -93,7 +93,8 @@ class block_modlib extends block_base {
 //        $spinurl = $CFG->wwwroot.'/blocks/modlib/img/spinner.gif';
         $spinurl = $CFG->wwwroot.'/blocks/modlib/img/tapping.gif';
 //        $o .= '<img src="'.$spinurl.'" class="spinner"  height="60" width="60">';
-        $o .= '<img src="'.$spinurl.'" class="spinner"  height="100">';
+        $o .= '<img src="'.$spinurl.'" class="spinner"  height="125">';
+//        $o .= '<img src="'.$spinurl.'" class="spinner">';
         $o .= html_writer::tag('div',get_string('please_wait', 'block_modlib'), array('id' => 'modlib-modal-msg', 'style' => 'margin-top: 10px;'));
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();
