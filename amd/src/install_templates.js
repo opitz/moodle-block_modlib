@@ -114,7 +114,8 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     success: function (result) {
                         $('#modlib-modal-msg').html(result);
                         // reload the page
-                        location.reload();
+//                        location.reload();
+                        window.location = window.location;
                     },
                     error: function (e) {
                         $('.modlib-modal').hide();

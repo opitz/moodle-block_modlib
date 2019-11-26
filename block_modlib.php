@@ -88,6 +88,61 @@ class block_modlib extends block_base {
         global $CFG, $DB;
         $o = '';
         // create a modal dialog that will be shown when installing modules
+        $o .= html_writer::start_tag('div',array('id' => 'modlib-spinner-modal', 'class' => 'modlib-modal', 'style' => 'display: show;'));
+        $o .= html_writer::start_tag('div', array('class' => 'spinner-container'));
+//        $spinurl = $CFG->wwwroot.'/blocks/modlib/img/spinner.gif';
+        $spinurl = $CFG->wwwroot.'/blocks/modlib/img/tapping.gif';
+//        $o .= '<img src="'.$spinurl.'" class="spinner"  height="60" width="60">';
+        $o .= '<img src="'.$spinurl.'" class="spinner"  height="100">';
+        $o .= html_writer::tag('div',get_string('please_wait', 'block_modlib'), array('id' => 'modlib-modal-msg', 'style' => 'margin-top: 10px;'));
+        $o .= html_writer::end_div();
+        $o .= html_writer::end_div();
+
+        // An introduction
+        $o .= html_writer::div(get_string('intro_text', 'block_modlib'));
+        $o .= html_writer::empty_tag('hr');
+
+        // A table with available modules
+        $o .= html_writer::start_tag('table', array());
+
+        foreach($sections as $section) {
+            // Ignore section 0
+            if($section->section == 0) {
+                continue;
+            }
+            // get the section name
+            $o .= html_writer::start_tag('tr', array('class' => 'template_section', 'sectionid' => $section->id));
+            if($section->name == '') {
+                $section_name = get_string('generic_sectionname', 'block_modlib') . ' '. $section->section;
+            } else {
+                $section_name = $section->name;
+            }
+            $o .= html_writer::tag('td', '<input type="checkbox" class="template_section" value="'.$section->section.'" sid ="'.$section->id.'" name="'.$section_name.'"> ');
+            $o .= html_writer::tag('th', $section_name, array('colspan' => '3'));
+            $o .= html_writer::end_tag('tr');
+            foreach($section->modules as $raw_mod) {
+                // get the module type
+                $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
+                // get the module record
+                $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
+
+                $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
+                $o .= html_writer::tag('td', '&nbsp;');
+                $o .= html_writer::tag('td', '<input type="checkbox" class="template_module" sid="'.$section->id.'" value="'.$module->id.'" cmid ="'.$raw_mod->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
+                $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: '.$module->name, array());
+                $o .= html_writer::end_tag('tr');
+            }
+        }
+        $o .= html_writer::end_tag('table');
+
+        $o .= $this->build_topics_menu();
+
+        return $o;
+    }
+    function render_modules0($sections) {
+        global $CFG, $DB;
+        $o = '';
+        // create a modal dialog that will be shown when installing modules
         $o .= html_writer::start_tag('div',array('id' => 'modlib-spinner-modal', 'class' => 'modlib-modal', 'style' => 'display: none;'));
         $o .= html_writer::start_tag('div', array('class' => 'spinner-container'));
         $o .= '<img src="https://localhost/moodle/theme/image.php/boost/core/1569403484/i/loading" class="spinner">';
@@ -136,7 +191,7 @@ class block_modlib extends block_base {
 
         return $o;
     }
-    function render_modules0($raw_mods) {
+    function render_modules00($raw_mods) {
         global $DB;
         $o = '';
         // create a modal dialog that will be shown when installing modules
