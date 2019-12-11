@@ -31,18 +31,18 @@ $string['configtitle'] = 'Module library block title';
 $string['html:addinstance'] = 'Add a new module library block';
 $string['html:myaddinstance'] = 'Add a new module library block to Dashboard';
 $string['newhtmlblock'] = 'Module Library';
-$string['pluginname'] = 'Content Creation Tool';
+$string['pluginname'] = 'Content Creation';
 $string['search:content'] = 'Module library block content';
 $string['privacy:metadata:block'] = 'The module library block stores all of its data within the block subsystem.';
 
 $string['intro_text0'] = 'Check one or more modules <i>or</i> one or more entire topics from the library and then select the topic to install. Modules will be installed <b>into</b> the selected topic while entire topics will be installed <b>after</b> it.';
-$string['intro_text'] = 'Select one or more activities <i>or</i> one or more entire topics from the library and then select the topic it should be installed into. (Note: entire topics will be added <i>after</i> the selected target topic)';
+$string['intro_text'] = 'Select one or more templates <i>or</i> a whole category e.g. Basic Templates from the library and then select the topic/section it should be installed into. (Note: an entire category will be installed in its own topic/section <i>after</i> the selected target.)';
 
 $string['no_library'] = 'No Template selected! Please click on the cogwheel to configure the block.';
-$string['select_section'] = 'Select a topic to install into';
-$string['select_section_after'] = 'Select a topic to install after';
-$string['select_section_mouseover'] = 'Select a topic where selected modules will be installed';
-$string['select_section_after_mouseover'] = 'Select a topic AFTER which the selected topic(s) will be installed';
+$string['select_section'] = 'Select a topic/section to install into';
+$string['select_section_after'] = 'Select a topic/section to install after';
+$string['select_section_mouseover'] = 'Select a topic/section where selected template(s) will be installed';
+$string['select_section_after_mouseover'] = 'Select a topic/section AFTER which the selected template(s) will be installed';
 $string['not_supported'] = 'This module type is not supported yet';
 $string['template_course'] = 'Template Course';
 $string['no_selection'] = 'Please select a template';
