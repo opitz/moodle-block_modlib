@@ -15,6 +15,10 @@ Feature: Adding and configuring Content Creation blocks
       | Course full name | Template Course 1 |
       | Course short name | TC1 |
       | Number of announcements | 3 |
+    And I am on "Template Course 1" course homepage with editing mode on
+    And I add a "Database" to section "1" and I fill the form with:
+      | Name | Template Database |
+    Then I should see "Template Database"
     And I create a course with:
       | Course full name | Course 1 |
       | Course short name | C1 |
@@ -25,5 +29,10 @@ Feature: Adding and configuring Content Creation blocks
     And I am on "Course 1" course homepage with editing mode on
     And I add the "Content Creation" block
     Then I should see "Content Creation"
+    And I configure the "Content Creation" block
+    And I set the following fields to these values:
+      | id_config_template_course | Template Course 1 |
+    And I press "Save changes"
+    Then I should see "Template Database" in the "Content Creation" "block"
     And I turn editing mode off
     Then I should not see "Content Creation"

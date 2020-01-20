@@ -20,7 +20,7 @@ class block_modlib_edit_form extends block_edit_form {
             $options[$tcourse->id] = $tcourse->fullname;
         }
         $mform->addElement('select', 'config_template_course', get_string('template_course', 'block_modlib'), $options);
-        $mform->addHelpButton('test', 'tests', 'block');
+//        $mform->addHelpButton('test', 'tests', 'block');
 
 
 //        $mform->setDefault('config_text', 'default value');
