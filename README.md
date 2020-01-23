@@ -28,4 +28,4 @@ Please note: A template module will be copied incuding all of its data if presen
 
 
 ----
-v.1.0 2019-10-18
+v.1.1 2020-01-23
