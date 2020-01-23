@@ -35,7 +35,8 @@ Feature: Adding and configuring Content Creation blocks
     And I press "Save changes"
     Then I should see "Template Database" in the "Content Creation" "block"
     And I set the field "Template Database" to "1"
-    And I select "Topic 1" from the "target_topic_btn" singleselect
+    And I click on "Select a topic/section to install into" "button"
+    And I click on "Topic 1" "link"
     And I turn editing mode off
     Then I should not see "Content Creation"
     And I should see "Template Database"

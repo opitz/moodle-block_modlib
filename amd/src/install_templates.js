@@ -1,6 +1,6 @@
-define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_events'], function ($, config, str, ModalFactory) {
+define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_events'], function($, config, str) {
     return {
-        init: function () {
+        init: function() {
 
 // ---------------------------------------------------------------------------------------------------------------------
             var sectionModules = function() {
@@ -9,16 +9,17 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     var sectionId = $(this).attr('sectionid');
                     $('.template_module[sid = "' + sectionId + '"]').prop('checked', status);
 
+                    var getTheString = '';
                     if ($('input:checked').length !== 0) {
-                        $('input.template_module').attr('disabled',''); // Disable module selection as they are part of a section
+                        $('input.template_module').attr('disabled', ''); // Disable module selection as they are part of a section
                         $('#target_topic_btn').removeClass('disabled');
                         // Change button to section text
-                        var getTheString = str.get_string('select_section_after', 'block_modlib');
+                        getTheString = str.get_string('select_section_after', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').html(theString);
                         });
                         // Change button title to section text
-                        var getTheString = str.get_string('select_section_after_mouseover', 'block_modlib');
+                        getTheString = str.get_string('select_section_after_mouseover', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').attr('title', theString);
                         });
@@ -26,19 +27,19 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                         $('input.template_module').removeAttr('disabled'); // Activate module selection
                         $('#target_topic_btn').addClass('disabled');
                         // Change button to module text
-                        var getTheString = str.get_string('select_section', 'block_modlib');
+                        getTheString = str.get_string('select_section', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').html(theString);
                         });
                         // Change button mouseover to module text
-                        var getTheString = str.get_string('select_section_mouseover', 'block_modlib');
+                        getTheString = str.get_string('select_section_mouseover', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').attr('title', theString);
                         });
                     }
                 });
 
-                $('.module_row').on('click', function () {
+                $('.module_row').on('click', function() {
                     if ($('input:checked').length !== 0) {
                         $('#target_topic_btn').removeClass('disabled');
                     } else {
@@ -47,10 +48,10 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                 });
             };
 // ---------------------------------------------------------------------------------------------------------------------
-            var executeModules = function (sectionId) {
+            var executeModules = function(sectionId) {
                 // Get the selected modules
                 var modules = [];
-                $('input[class="template_module"]:checked').each(function () {
+                $('input[class="template_module"]:checked').each(function() {
                     var module = {};
                     module.sectionid = sectionId;
                     module.cmid = $(this).attr('cmid');
@@ -70,7 +71,7 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             var executeSections = function(sectionId) {
                 // Get the selected sections
                 var sections = [];
-                $('input[class="template_section"]:checked').each(function () {
+                $('input[class="template_section"]:checked').each(function() {
                     var section = {};
                     section.id = $(this).attr('sid');
                     section.name = $(this).attr('name');
@@ -83,10 +84,10 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                 data.payload = sections;
 
                 callAjax(data);
-            }
+            };
 // ---------------------------------------------------------------------------------------------------------------------
-            var execute = function () {
-                $(".modlib-sections .dropdown-item").on('click', function () {
+            var execute = function() {
+                $(".modlib-sections .dropdown-item").on('click', function() {
 
                     $('.modlib-modal').show(); // Show the graphical interlude...
 
@@ -111,27 +112,27 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                         'type': data.type,
                         'payload': data.payload
                     },
-                    success: function (result) {
+                    success: function(result) {
                         $('#modlib-modal-msg').html(result);
-                        // reload the page
+                        // Reload the page
 //                        location.reload();
                         window.location = window.location;
                     },
-                    error: function (e) {
+                    error: function() {
                         $('.modlib-modal').hide();
-                        console.error(e);
+//                        Console.error(e);
                     }
                 });
-            }
+            };
 // ---------------------------------------------------------------------------------------------------------------------
-            var initFunctions = function () {
+            var initFunctions = function() {
                 // Load all required functions above
                 sectionModules();
                 execute();
             };
 
 // _____________________________________________________________________________________________________________________
-            $(document).ready(function () {
+            $(document).ready(function() {
                 initFunctions();
 
                 $('#modlib-spinner-modal').hide();
@@ -139,4 +140,4 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             });
         }
     };
-})
+});
