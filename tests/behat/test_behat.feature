@@ -34,7 +34,7 @@ Feature: Adding and configuring Content Creation blocks
       | id_config_template_course | Template Course 1 |
     And I press "Save changes"
     Then I should see "Template Database" in the "Content Creation" "block"
-    And I select "Data: Template Database" from "template_selection"
+    And I set the field "Template Database" to "1"
     And I select "Topic 1" from the "target_topic_btn" singleselect
     And I turn editing mode off
     Then I should not see "Content Creation"
