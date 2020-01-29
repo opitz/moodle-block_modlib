@@ -3,34 +3,57 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
         init: function() {
 
 // ---------------------------------------------------------------------------------------------------------------------
-            var sectionModules = function() {
+            var selectModules = function() {
+                // React to changes of the section selection
                 $('.template_section').change(function() {
                     var status = $(this).find('input').is(':checked');
                     var sectionId = $(this).attr('sectionid');
                     $('.template_module[sid = "' + sectionId + '"]').prop('checked', status);
 
                     var getTheString = '';
-                    if ($('input:checked').length !== 0) {
-                        $('input.template_module').attr('disabled', ''); // Disable module selection as they are part of a section
+                    if ($('input.template_section:checked').length !== 0) {
+                        // Select entire sections will all their modules
+
+                        // Disable module selection as they are part of a section
+                        $('input.template_module:checked:not([disabled])').prop("checked", false);
+                        $('.template_module[sid = "' + sectionId + '"]').prop('checked', status);
+                        $('input.template_module').attr('disabled', '');
+                        console.log('module selection disabled');
+
+                        // Enable target button
                         $('#target_topic_btn').removeClass('disabled');
+                        console.log('target button enabled');
+
                         // Change button to section text
                         getTheString = str.get_string('select_section_after', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').html(theString);
+                            console.log('button text set to "' + theString + '"');
                         });
-                        // Change button title to section text
+
+                        // Change button mouseover to section text
                         getTheString = str.get_string('select_section_after_mouseover', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').attr('title', theString);
                         });
                     } else {
-                        $('input.template_module').removeAttr('disabled'); // Activate module selection
+                        // Allow to select single modules
+
+                        // Activate module selection
+                        $('input.template_module').removeAttr('disabled');
+                        console.log('module selection no longer disabled');
+
+                        // Disable target button
                         $('#target_topic_btn').addClass('disabled');
+                        console.log('target button disabled');
+
                         // Change button to module text
                         getTheString = str.get_string('select_section', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').html(theString);
+                            console.log('button text set to "' + theString + '"');
                         });
+
                         // Change button mouseover to module text
                         getTheString = str.get_string('select_section_mouseover', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
@@ -39,8 +62,9 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     }
                 });
 
+                // Select single modules
                 $('.module_row').on('click', function() {
-                    if ($('input:checked').length !== 0) {
+                    if ($('input.template_module:checked').length !== 0) {
                         $('#target_topic_btn').removeClass('disabled');
                     } else {
                         $('#target_topic_btn').addClass('disabled');
@@ -51,7 +75,7 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             var executeModules = function(sectionId) {
                 // Get the selected modules
                 var modules = [];
-                $('input[class="template_module"]:checked').each(function() {
+                $('input.template_module:checked').each(function() {
                     var module = {};
                     module.sectionid = sectionId;
                     module.cmid = $(this).attr('cmid');
@@ -71,7 +95,7 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             var executeSections = function(sectionId) {
                 // Get the selected sections
                 var sections = [];
-                $('input[class="template_section"]:checked').each(function() {
+                $('input.template_section:checked').each(function() {
                     var section = {};
                     section.id = $(this).attr('sid');
                     section.name = $(this).attr('name');
@@ -102,7 +126,9 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             };
 // ---------------------------------------------------------------------------------------------------------------------
             var callAjax = function(data) {
-
+console.log('==> sectionid = ' + data.sectionid);
+console.log('==> type = ' + data.type);
+console.log('==> payload = ' + data.payload);
                 var execUrl = config.wwwroot + '/blocks/modlib/ajax/install_templates.php';
                 $.ajax({
                     url: execUrl,
@@ -115,8 +141,9 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     success: function(result) {
                         $('#modlib-modal-msg').html(result);
                         // Reload the page
-//                        location.reload();
-                        window.location = window.location;
+                        alert('now reloading the page!');
+                        location.reload();
+//                        window.location = window.location;
                     },
                     error: function() {
                         $('.modlib-modal').hide();
@@ -127,7 +154,8 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
 // ---------------------------------------------------------------------------------------------------------------------
             var initFunctions = function() {
                 // Load all required functions above
-                sectionModules();
+                selectModules();
+//                sectionModules();
                 execute();
             };
 
