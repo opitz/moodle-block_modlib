@@ -126,9 +126,9 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             };
 // ---------------------------------------------------------------------------------------------------------------------
             var callAjax = function(data) {
-console.log('==> sectionid = ' + data.sectionid);
-console.log('==> type = ' + data.type);
-console.log('==> payload = ' + data.payload);
+//console.log('==> sectionid = ' + data.sectionid);
+//console.log('==> type = ' + data.type);
+//console.log('==> payload = ' + data.payload);
                 var execUrl = config.wwwroot + '/blocks/modlib/ajax/install_templates.php';
                 $.ajax({
                     url: execUrl,
@@ -141,9 +141,8 @@ console.log('==> payload = ' + data.payload);
                     success: function(result) {
                         $('#modlib-modal-msg').html(result);
                         // Reload the page
-                        alert('now reloading the page!');
+                        window.location = window.location;
                         location.reload();
-//                        window.location = window.location;
                     },
                     error: function() {
                         $('.modlib-modal').hide();
