@@ -103,15 +103,15 @@ function install_section($target_sid, $template_sid) {
     } else {
         move_section_to($course, $template_section->section, $insert_after_section->section+1);
         $new_section = $DB->get_record('course_sections', array('course' => $course->id, 'section' => $insert_after_section->section+1));
-    }
 
-    // If template section has a higher section number than there are sections in the target course empty sections
-    // up to that number are created - we need to get rid of them now
-    // the unwanted sections all have higher id's than the wanted copied section - so we will delete those...
-    $target_sections = $DB->get_records('course_sections', array('course' => $course->id));
-    foreach ($target_sections as $target_section) {
-        if ($target_section->id > $new_section->id) {
-            $DB->delete_records('course_sections', array('id' => $target_section->id));
+        // If template section has a higher section number than there are sections in the target course empty sections
+        // up to that number are created - we need to get rid of them now
+        // the unwanted sections all have higher id's than the wanted copied section - so we will delete those...
+        $target_sections = $DB->get_records('course_sections', array('course' => $course->id));
+        foreach ($target_sections as $target_section) {
+            if ($target_section->id > $new_section->id) {
+                $DB->delete_records('course_sections', array('id' => $target_section->id));
+            }
         }
     }
 
