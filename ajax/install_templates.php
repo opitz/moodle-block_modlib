@@ -46,6 +46,77 @@ function install_section($target_sid, $template_sid) {
     require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
     require_once($CFG->libdir . '/filelib.php');
 
+    // For this we need to keep empty directories on backup - and will revert it to it's original setting after
+    $keeptempdirectoriesonbackup = $CFG->keeptempdirectoriesonbackup;
+    $CFG->keeptempdirectoriesonbackup = true;
+
+    // get the section after which the new section will be installed
+    $template_section = $DB->get_record('course_sections', array('id' => $template_sid));
+    $insert_after_section = $DB->get_record('course_sections', array('id' => $target_sid));
+    $course = $DB->get_record('course', array('id' => $insert_after_section->course));
+    $course_sections = $DB->get_records('course_sections', array('course' => $course->id));
+
+    // Step 1: Backup the section modules
+    $bc = new backup_controller(backup::TYPE_1SECTION, $template_sid, backup::FORMAT_MOODLE,
+        backup::INTERACTIVE_NO, backup::MODE_SAMESITE, $USER->id);
+
+    $backupid       = $bc->get_backupid();
+    $backupbasepath = $bc->get_plan()->get_basepath();
+
+    $bc->execute_plan();
+    $bc->destroy();
+
+    // Step 2: Restore the backup immediately.
+    // When restoring a section backup the section will be placed into the very position it was backup'd from
+    // If there is already a section at this position we need to insert an empty section there to allow it to be overwritten
+    if (count($course_sections) >= $template_section->section+1) {
+        $insert_section = course_create_section($course->id, $template_section->section);
+    }
+
+    $rc = new restore_controller($backupid, $course->id,
+        backup::INTERACTIVE_NO, backup::MODE_SAMESITE, $USER->id, backup::TARGET_EXISTING_ADDING);
+    $rc->set_status(\backup::STATUS_AWAITING);
+    $rc->execute_plan();
+    $rc->destroy();
+
+    // Step 3:Move the new section to the desired position
+    if (count($course_sections) >= $template_section->section+1) {
+//        move_section_to($course, $insert_section->section, $insert_after_section->section+1);
+        $section2move = (int) $insert_section->section;
+        $position2move2 = (int) $insert_after_section->section+1;
+        if ($section2move != $position2move2) { // only move it if it needs to be moved
+            move_section_to($course, $section2move, $position2move2);
+        }
+    } else {
+        move_section_to($course, $template_section->section, $insert_after_section->section+1);
+        // In case the target course has less sections than the position of the backup section, empty sections between
+        // this and the position of the restored section have been automatically inserted and are now deleted again
+        // As they will have all higher IDs than the ID of the newly inserted section lets delete these...
+        $new_section = $DB->get_record('course_sections', array('course' => $course->id, 'section' => $insert_after_section->section+1));
+        $target_sections = $DB->get_records('course_sections', array('course' => $course->id));
+        foreach ($target_sections as $target_section) {
+            if ($target_section->id > $new_section->id) {
+                $DB->delete_records('course_sections', array('id' => $target_section->id));
+            }
+        }
+    }
+
+
+
+
+    $CFG->keeptempdirectoriesonbackup = $keeptempdirectoriesonbackup;
+
+    rebuild_course_cache($course->id, true); // rebuild the cache for that course so the changes become effective
+
+    return get_string('installed', 'block_modlib', 'Section');
+}
+function install_section0($target_sid, $template_sid) {
+    global $CFG, $DB, $USER;
+
+    require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
+    require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
+    require_once($CFG->libdir . '/filelib.php');
+
     // get the section after which the new section will be installed
     $insert_after_section = $DB->get_record('course_sections', array('id' => $target_sid));
 
@@ -63,7 +134,7 @@ function install_section($target_sid, $template_sid) {
     $template_section = $DB->get_record('course_sections', array('id' => $template_sid));
 //    $target_section = $DB->get_record('course_sections', array('id' => $target_sid));
     // create a new section at the same location as the template section because the backup will be restored into the same position
-    // but only do this if 
+    // but only do this if
     if (count($course_sections) >= $template_section->section+1) {
         $insert_section = course_create_section($course->id, $template_section->section);
     }
@@ -124,7 +195,7 @@ function install_section($target_sid, $template_sid) {
 
     return get_string('installed', 'block_modlib', 'Section');
 }
-function install_section0($target_sid, $template_sid) {
+function install_section00($target_sid, $template_sid) {
     global $CFG, $DB, $USER;
 
     require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
