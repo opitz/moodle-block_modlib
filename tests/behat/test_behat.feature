@@ -10,33 +10,20 @@ Feature: Adding and configuring Content Creation blocks
     Given the following "users" exist:
       | username | firstname | lastname | email |
       | teacher1 | Teacher | 1 | teacher1@example.com |
-    And I log in as "admin"
-    And I create a course with:
-      | Course full name | Template Course 1 |
-      | Course short name | TC1 |
-      | Number of announcements | 3 |
-    And I am on "Template Course 1" course homepage with editing mode on
-    And I add a "Database" to section "1" and I fill the form with:
-      | Name | Template Database |
-    Then I should see "Template Database"
-    And I create a course with:
-      | Course full name | Course 1 |
-      | Course short name | C1 |
-      | Number of announcements | 5 |
-    And I enrol "Teacher 1" user as "Teacher"
-    And I log out
+      | student1 | Student | 1 | student1@example.com |
+    And the following "courses" exist:
+      | fullname          | shortname | format  | coursedisplay | numsections |
+      | Course 1          | C1        | topics  | 0             | 5           |
+      | Template Course 1 | TC1       | topics  | 0             | 3           |
+    And the following "course enrolments" exist:
+      | user     | course | role           |
+      | teacher1 | C1     | editingteacher |
+      | student1 | C1     | student |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add the "Content Creation" block
+
+  @javascript
+  Scenario: When installed the Content Creation (modlib) it can be seen
+    When I add the "Content Creation" block
     Then I should see "Content Creation"
-    And I configure the "Content Creation" block
-    And I set the following fields to these values:
-      | id_config_template_course | Template Course 1 |
-    And I press "Save changes"
-    Then I should see "Template Database" in the "Content Creation" "block"
-    And I set the field "Template Database" to "1"
-    And I click on "Select a topic/section to install into" "button"
-    And I click on "Topic 1" "link"
-    And I turn editing mode off
-    Then I should not see "Content Creation"
-    And I should see "Template Database"
+
