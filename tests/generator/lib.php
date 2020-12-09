@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Behat data generator for mod_quiz.
+ * Behat data generator for plugin configuration.
  *
  * @package   block_modlib
  * @category  test

@@ -24,7 +24,7 @@ Feature: Adding and configuring Content Creation blocks
       | user     | course | role            |
       | teacher1 | C1     | editingteacher  |
       | student1 | C1     | student         |
-    And the following "plugin configuration" exist:
+    And the following "plugin configurations" exist:
       | plugin       | name             | value |
       | block_modlib | templatecategory | 1     |
       | block_modlib | defaulttemplate  | 0     |

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Behat data generator for mod_quiz.
+ * Behat data generator for block_modlib.
  *
  * @package   block_modlib
  * @category  test
@@ -33,11 +33,11 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-class behat_block_modlib_generator_generator extends behat_generator_base {
+class behat_block_modlib_generator extends behat_generator_base {
 
     protected function get_creatable_entities(): array {
         return [
-            'plugin_configs' => [
+            'plugin configurations' => [
                 'datagenerator' => 'plugin_config',
                 'required' => ['plugin','name','value']
             ],
