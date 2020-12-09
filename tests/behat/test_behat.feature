@@ -31,4 +31,5 @@ Feature: Adding and configuring Content Creation blocks
   Scenario: When installed the Content Creation (modlib) it can be seen
     When I add the "Content Creation" block
     Then I should see "Content Creation"
+    And I should see "No Template selected! Please click on the cogwheel to configure the block."
 
