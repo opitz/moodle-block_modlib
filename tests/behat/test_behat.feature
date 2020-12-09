@@ -24,6 +24,10 @@ Feature: Adding and configuring Content Creation blocks
       | user     | course | role            |
       | teacher1 | C1     | editingteacher  |
       | student1 | C1     | student         |
+    And the following "plugin configuration" exist:
+      | plugin       | name             | value |
+      | block_modlib | templatecategory | 1     |
+      | block_modlib | defaulttemplate  | 0     |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
 
