@@ -24,16 +24,15 @@ Feature: Adding and configuring Content Creation blocks
       | user     | course | role            |
       | teacher1 | C1     | editingteacher  |
       | student1 | C1     | student         |
-    And the following "block_modlib > plugin configurations" exist:
-      | plugin       | name             | value |
-      | block_modlib | templatecategory | 1     |
-      | block_modlib | defaulttemplate  | 0     |
+#    And the following "block_modlib > plugin configurations" exist:
+#      | plugin       | name             | value |
+#      | block_modlib | templatecategory | 1     |
+#      | block_modlib | defaulttemplate  | 0     |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
 
   @javascript
   Scenario: When installed the Content Creation (modlib) it can be seen
-    When I add the "Content Creation" block
-    Then I should see "Content Creation"
+    When I add the "Module Library" block
+    Then I should see "Module Library"
     And I should see "No Template selected! Please click on the cogwheel to configure the block."
-

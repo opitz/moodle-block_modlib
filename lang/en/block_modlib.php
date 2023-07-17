@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_modlib', language 'en', branch 'MOODLE_20_STABLE'
+ * Strings for component 'block_modlib', language 'en'
  *
  * @package   block_modlib
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @copyright 2023 onwards Matthias Opitz (opitz@gmx.de)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +31,7 @@ $string['configtitle'] = 'Module library block title';
 $string['modlib:addinstance'] = 'Add a new module library block';
 $string['modlib:myaddinstance'] = 'Add a new module library block to Dashboard';
 $string['newhtmlblock'] = 'Module Library';
-$string['pluginname'] = 'Content Creation';
+$string['pluginname'] = 'Module Library';
 $string['search:content'] = 'Module library block content';
 $string['privacy:metadata:block'] = 'The module library block stores all of its data within the block subsystem.';
 
@@ -48,6 +48,12 @@ $string['template_course'] = 'Template Course';
 $string['no_selection'] = 'Please select a template';
 $string['please_wait'] = 'Please wait...';
 $string['installed'] = '{$a} installed';
+$string['module_installed'] = 'Module installed.';
+$string['all_modules_installed'] = 'All modules installed';
+$string['no_modules_installed'] = 'No modules installed';
+$string['section_installed'] = 'Section installed.';
+$string['all_sections_installed'] = 'All sections installed';
+$string['no_sections_installed'] = 'No sections installed';
 $string['templatecategory'] = 'Course category for module templates';
 $string['templatecategory_desc'] = 'Courses from this category will be available as module templates';
 $string['notemplate'] = 'Select Template Course';

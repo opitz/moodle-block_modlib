@@ -18,123 +18,153 @@
  * Form for editing HTML block instances.
  *
  * @package   block_modlib
- * @copyright 1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @copyright 2023 onwards Matthias Opitz (opitz@gmx.de)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class block_modlib extends block_base {
 
-    function has_config() {
+    /**
+     * Config?
+     *
+     * @return bool
+     */
+    public function has_config() : bool {
         return true;
     }
 
-
-//----------------------------------------------------------------------------------------------------------------------
-    function init() {
+    /**
+     * Initialise
+     *
+     * @return void
+     * @throws coding_exception
+     */
+    public function init() : void {
         $this->title = get_string('pluginname', 'block_modlib');
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-    function get_content() {
-        global $PAGE;
+    /**
+     * Get the content.
+     *
+     * @return object
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    public function get_content() : object {
 
-        // only show this when the user is editing
+        // Only show this when the user is editing.
         if (!$this->page->user_is_editing()) {
             $this->content = new stdClass;
             $this->content->text = '';
-            $this->content->footer = '';
         } else {
-            $PAGE->requires->js_call_amd('block_modlib/install_templates', 'init', array());
+            $this->page->requires->js_call_amd('block_modlib/install_templates', 'init', array());
 
             $this->content = new stdClass;
             $this->content->text = $this->get_library_modules();
-            $this->content->footer = '';
         }
+        $this->content->footer = '';
         return $this->content;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-    function get_library_modules() {
+    /**
+     * Get the modules from the template course.
+     *
+     * @return string
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    public function get_library_modules() : string {
         global $DB;
 
-        // The ID of the 'Template Course' course
-        if (isset($this->config->template_course)) {
-            $lib_course_id = $this->config->template_course;
-        } else {
-            $lib_course_id = get_config('block_modlib', 'defaulttemplate');
-        }
-
-//        if(!$lib_course_id) {
-//            $lib_course_id = get_config('block_modlib', 'defaulttemplate');
-//         }
+        // The ID of the 'Template Course' course.
+        $libcourseid = $this->config->template_course ?? get_config('block_modlib', 'defaulttemplate');
 
         $result = array();
-        // The ID of the sections of that course
-        $sections = $DB->get_records('course_sections', array('course' => $lib_course_id));
-        foreach($sections as $section) {
-            if($section->sequence != '' && $section->visible != 0) {
-                // get the modules
-                $section->modules = $DB->get_records('course_modules', array('course' => $lib_course_id, 'section' => $section->id));
+        // The ID of the sections of that course.
+        $sections = $DB->get_records('course_sections', array('course' => $libcourseid));
+        foreach ($sections as $section) {
+            if ($section->sequence != '' && $section->visible != 0) {
+                // Get the modules.
+                $section->modules = $DB->get_records('course_modules', array(
+                    'course' => $libcourseid,
+                    'section' => $section->id
+                ));
                 $result[] = $section;
             }
         }
 
-        if(sizeof($sections) == 0) {
+        if (count($sections) == 0) {
             return get_string('no_library', 'block_modlib');
         }
 
-        // Show what we found
+        // Show what we found.
         return $this->render_modules($result);
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-    function render_modules($sections) {
+    /**
+     * Render the modules.
+     *
+     * @param array $sections
+     * @return string
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    public function render_modules(array $sections) :string {
         global $CFG, $DB;
         $o = '';
-        // create a modal dialog that will be shown when installing modules
-        $o .= html_writer::start_tag('div',array('id' => 'modlib-spinner-modal', 'class' => 'modlib-modal', 'style' => 'display: none;'));
+        // Create a modal dialog that will be shown when installing modules.
+        $o .= html_writer::start_tag('div', array(
+            'id' => 'modlib-spinner-modal',
+            'class' => 'modlib-modal',
+            'style' => 'display: none;'
+        ));
         $o .= html_writer::start_tag('div', array('class' => 'spinner-container'));
-//        $spinurl = $CFG->wwwroot.'/blocks/modlib/img/spinner.gif';
-        $spinurl = $CFG->wwwroot.'/blocks/modlib/img/tapping.gif';
-//        $o .= '<img src="'.$spinurl.'" class="spinner"  height="60" width="60">';
-        $o .= '<img src="'.$spinurl.'" class="spinner"  height="125">';
-//        $o .= '<img src="'.$spinurl.'" class="spinner">';
-        $o .= html_writer::tag('div',get_string('please_wait', 'block_modlib'), array('id' => 'modlib-modal-msg', 'style' => 'margin-top: 10px;'));
+        $idleurl = $CFG->wwwroot.'/blocks/modlib/img/tapping.gif';
+        $o .= '<img src="'.$idleurl.'" class="spinner"  height="125">';
+        $o .= html_writer::tag('div', get_string('please_wait', 'block_modlib'), array(
+            'id' => 'modlib-modal-msg',
+            'style' => 'margin-top: 10px;'
+        ));
         $o .= html_writer::end_div();
         $o .= html_writer::end_div();
 
-        // An introduction
+        // An introduction.
         $o .= html_writer::div(get_string('intro_text', 'block_modlib'));
         $o .= html_writer::empty_tag('hr');
 
-        // A table with available modules
+        // A table with available modules.
         $o .= html_writer::start_tag('table', array());
 
-        foreach($sections as $section) {
-            // Ignore section 0
-            if($section->section == 0) {
+        foreach ($sections as $section) {
+            // Ignore section 0.
+            if ($section->section == 0) {
                 continue;
             }
-            // get the section name
+
             $o .= html_writer::start_tag('tr', array('class' => 'template_section', 'sectionid' => $section->id));
-            if($section->name == '') {
-                $section_name = get_string('generic_sectionname', 'block_modlib') . ' '. $section->section;
+            // Get the section name.
+            if ($section->name == '') {
+                $sectionname = get_string('generic_sectionname', 'block_modlib') . ' '. $section->section;
             } else {
-                $section_name = $section->name;
+                $sectionname = $section->name;
             }
-            $o .= html_writer::tag('td', '<input type="checkbox" class="template_section" value="'.$section->section.'" sid ="'.$section->id.'" name="'.$section_name.'"> ');
-            $o .= html_writer::tag('th', $section_name, array('colspan' => '3'));
+
+            $o .= html_writer::tag('td', '<input type="checkbox" class="template_section" value="'.
+                $section->section . '" sid ="' . $section->id.'" name="' . $sectionname.'"> ');
+            $o .= html_writer::tag('th', $sectionname, array('colspan' => '3'));
             $o .= html_writer::end_tag('tr');
-            foreach($section->modules as $raw_mod) {
-                // get the module type
-                $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
-                // get the module record
-                $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
+            foreach ($section->modules as $rawmod) {
+                // Get the module type.
+                $moduletype = $DB->get_record('modules', array('id' => $rawmod->module));
+                // Get the module record.
+                $module = $DB->get_record($moduletype->name, array('id' => $rawmod->instance));
 
                 $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
                 $o .= html_writer::tag('td', '&nbsp;');
-                $o .= html_writer::tag('td', '<input type="checkbox" class="template_module" sid="'.$section->id.'" value="'.$module->id.'" cmid ="'.$raw_mod->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
-                $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: '.$module->name, array());
+                $o .= html_writer::tag('td', '<input type="checkbox" class="template_module" sid="' .
+                    $section->id.'" value="' . $module->id . '" cmid ="'.$rawmod->id . '" module_type ="' .
+                    $moduletype->name.'" name="' . $module->name . '"> ');
+                $o .= html_writer::tag('td', '<b>' . ucfirst($moduletype->name) . '</b>: '.
+                    $module->name, array());
                 $o .= html_writer::end_tag('tr');
             }
         }
@@ -144,99 +174,17 @@ class block_modlib extends block_base {
 
         return $o;
     }
-    function render_modules0($sections) {
-        global $CFG, $DB;
-        $o = '';
-        // create a modal dialog that will be shown when installing modules
-        $o .= html_writer::start_tag('div',array('id' => 'modlib-spinner-modal', 'class' => 'modlib-modal', 'style' => 'display: none;'));
-        $o .= html_writer::start_tag('div', array('class' => 'spinner-container'));
-        $o .= '<img src="https://localhost/moodle/theme/image.php/boost/core/1569403484/i/loading" class="spinner">';
-        $o .= html_writer::tag('div',get_string('please_wait', 'block_modlib'), array('id' => 'modlib-modal-msg', 'style' => 'margin-top: 10px;'));
-        $o .= html_writer::end_div();
-        $o .= html_writer::end_div();
 
-        // An introduction
-        $o .= html_writer::div(get_string('intro_text', 'block_modlib'));
-        $o .= html_writer::empty_tag('hr');
-
-        // A table with available modules
-        $o .= html_writer::start_tag('table', array());
-
-        foreach($sections as $section) {
-            // Ignore section 0
-            if($section->section == 0) {
-                continue;
-            }
-            // get the section name
-            $o .= html_writer::start_tag('tr', array('class' => 'template_section', 'sectionid' => $section->id));
-            if($section->name == '') {
-                $section_name = get_string('generic_sectionname', 'block_modlib') . ' '. $section->section;
-            } else {
-                $section_name = $section->name;
-            }
-            $o .= html_writer::tag('td', '<input type="checkbox" class="template_section" value="'.$section->section.'" sid ="'.$section->id.'" name="'.$section_name.'"> ');
-            $o .= html_writer::tag('th', $section_name, array('colspan' => '3'));
-            $o .= html_writer::end_tag('tr');
-            foreach($section->modules as $raw_mod) {
-                // get the module type
-                $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
-                // get the module record
-                $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
-
-                $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
-                $o .= html_writer::tag('td', '&nbsp;');
-                $o .= html_writer::tag('td', '<input type="checkbox" class="template_module" sid="'.$section->id.'" value="'.$module->id.'" cmid ="'.$raw_mod->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
-                $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: '.$module->name, array());
-                $o .= html_writer::end_tag('tr');
-            }
-        }
-        $o .= html_writer::end_tag('table');
-
-        $o .= $this->build_topics_menu();
-
-        return $o;
-    }
-    function render_modules00($raw_mods) {
-        global $DB;
-        $o = '';
-        // create a modal dialog that will be shown when installing modules
-        $o .= '<div class="modlib-modal" style="display: none;" id="modlib-spinner-modal">';
-        $o .= '<div class="spinner-container">';
-        $o .= '<img src="https://localhost/moodle/theme/image.php/boost/core/1569403484/i/loading" class="spinner">';
-        $o .= '<div id="modlib-modal-msg" style="margin-top: 10px;">'.get_string('please_wait', 'block_modlib').'</div>';
-        $o .= '</div></div>';
-
-        // An introduction
-        $o .= html_writer::div(get_string('intro_text', 'block_modlib'));
-        $o .= '<hr>';
-
-        // A table with available modules
-        $o .= html_writer::start_tag('table', array());
-
-        foreach($raw_mods as $raw_mod) {
-            // get the module type
-            $module_type = $DB->get_record('modules', array('id' => $raw_mod->module));
-            // get the module record
-            $module = $DB->get_record($module_type->name, array('id' => $raw_mod->instance));
-
-            $o .= html_writer::start_tag('tr', array('id' => $module->id, 'class' => 'module_row'));
-            $o .= html_writer::tag('td', '<input type="checkbox" class="module" value="'.$module->id.'" cmid ="'.$raw_mod->id.'" module_type ="'.$module_type->name.'" name="'.$module->name.'"> ');
-            $o .= html_writer::tag('td','<b>'.ucfirst($module_type->name).'</b>: '.$module->name, array());
-            $o .= html_writer::end_tag('tr');
-        }
-        $o .= html_writer::end_tag('table');
-
-        $o .= $this->build_topics_menu();
-
-        return $o;
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-    function build_topics_menu() {
-        global $COURSE, $PAGE;
+    /**
+     * Build the topics menu.
+     *
+     * @return string
+     * @throws coding_exception
+     */
+    public function build_topics_menu() : string {
         $o = '';
 
-        // build a drop down menu to select a target topic
+        // Build a drop down menu to select a target topic.
         $course = $this->page->course;
         $courseformat = course_get_format($course);
         $coursesections = $courseformat->get_sections();
@@ -245,18 +193,25 @@ class block_modlib extends block_base {
         $o .= "<form method='post'>";
 
         $title = get_string('select_section_mouseover', 'block_modlib');
-        $o .= html_writer::start_tag('button', array('type' => 'button', 'id'=>'target_topic_btn', 'class' => 'btn dropdown-toggle btn-primary disabled', 'data-toggle' => 'dropdown', 'title' => $title));
+        $o .= html_writer::start_tag('button', array(
+            'type' => 'button',
+            'id' => 'target_topic_btn',
+            'class' => 'btn dropdown-toggle btn-primary disabled',
+            'data-toggle' => 'dropdown',
+            'title' => $title
+        ));
         $o .= get_string('select_section', 'block_modlib');
         $o .= html_writer::end_tag('button');
 
         $o .= html_writer::start_tag('div', array('class' => 'dropdown-menu modlib-sections'));
-        foreach($coursesections as $section) {
-            if($section->name == '') {
-                $section_name = get_string('generic_sectionname', 'block_modlib') . ' ' . $section->section;
+        foreach ($coursesections as $section) {
+            if ($section->name == '') {
+                $sectionname = get_string('generic_sectionname', 'block_modlib') . ' ' . $section->section;
             } else {
-                $section_name = $section->name .' ('.get_string('generic_sectionname', 'block_modlib') . ' ' . $section->section .')';
+                $sectionname = $section->name .' ('.get_string('generic_sectionname', 'block_modlib') .
+                    ' ' . $section->section .')';
             }
-            $o.= html_writer::tag('a', $section_name, array(
+            $o .= html_writer::tag('a', $sectionname, array(
                 'class' => 'dropdown-item',
                 'value' => $section->id
             ));

@@ -18,17 +18,14 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                         $('input.template_module:checked:not([disabled])').prop("checked", false);
                         $('.template_module[sid = "' + sectionId + '"]').prop('checked', status);
                         $('input.template_module').attr('disabled', '');
-                        console.log('module selection disabled');
 
                         // Enable target button
                         $('#target_topic_btn').removeClass('disabled');
-                        console.log('target button enabled');
 
                         // Change button to section text
                         getTheString = str.get_string('select_section_after', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').html(theString);
-                            console.log('button text set to "' + theString + '"');
                         });
 
                         // Change button mouseover to section text
@@ -41,17 +38,14 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
 
                         // Activate module selection
                         $('input.template_module').removeAttr('disabled');
-                        console.log('module selection no longer disabled');
 
                         // Disable target button
                         $('#target_topic_btn').addClass('disabled');
-                        console.log('target button disabled');
 
                         // Change button to module text
                         getTheString = str.get_string('select_section', 'block_modlib');
                         $.when(getTheString).done(function(theString) {
                             $('#target_topic_btn').html(theString);
-                            console.log('button text set to "' + theString + '"');
                         });
 
                         // Change button mouseover to module text
@@ -126,9 +120,6 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             };
 // ---------------------------------------------------------------------------------------------------------------------
             var callAjax = function(data) {
-//console.log('==> sectionid = ' + data.sectionid);
-//console.log('==> type = ' + data.type);
-//console.log('==> payload = ' + data.payload);
                 var execUrl = config.wwwroot + '/blocks/modlib/ajax/install_templates.php';
                 $.ajax({
                     url: execUrl,
@@ -141,12 +132,10 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     success: function(result) {
                         $('#modlib-modal-msg').html(result);
                         // Reload the page
-                        window.location = window.location;
                         location.reload();
                     },
                     error: function() {
                         $('.modlib-modal').hide();
-//                        Console.error(e);
                     }
                 });
             };
@@ -154,7 +143,6 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
             var initFunctions = function() {
                 // Load all required functions above
                 selectModules();
-//                sectionModules();
                 execute();
             };
 

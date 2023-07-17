@@ -15,16 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *  Module Library
+ * Module Library
  *
- *  @package    block_modlib
- *  @copyright  2019 (C) QMUL
- *  @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block_modlib
+ * @copyright 2023 onwards Matthias Opitz (opitz@gmx.de)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
-
-//require_once __DIR__.'/lib/settingslib.php';
 
 if ($ADMIN->fulltree) {
     $name = 'block_modlib/templatecategory';
@@ -32,26 +30,26 @@ if ($ADMIN->fulltree) {
     $description = get_string('templatecategory_desc', 'block_modlib');
     $default = "Templates";
 
-    // get all course categories as options and show a drop down menu
+    // Get all course categories as options and show a drop down menu.
     $options = array();
     $categories = $DB->get_records('course_categories', null, 'name');
-    foreach($categories as $category) {
+    foreach ($categories as $category) {
         $options[$category->id] = $category->name;
     }
     $settings->add(new admin_setting_configselect($name, $title, $description, 1, $options));
-    $template_cat_id = get_config('block_modlib', 'templatecategory');
-    if(isset($template_cat_id) && $template_cat_id > 0){
+    $templatecatid = get_config('block_modlib', 'templatecategory');
+    if (isset($templatecatid) && $templatecatid > 0) {
         $name = 'block_modlib/defaulttemplate';
         $title = get_string('defaulttemplate', 'block_modlib');
         $description = get_string('defaulttemplate_desc', 'block_modlib');
         $default = 0;
 
-        // get all courses from the selected template course category as options and show a drop down menu
+        // Get all courses from the selected template course category as options and show a drop down menu.
         $options = array();
-        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.id = '$template_cat_id'";
+        $sql = "select c.* from {course} c join {course_categories} cc on cc.id = c.category where cc.id = '$templatecatid'";
         $tcourses = $DB->get_records_sql($sql);
         $options[$default] = '';
-        foreach($tcourses as $tcourse) {
+        foreach ($tcourses as $tcourse) {
             $options[$tcourse->id] = $tcourse->fullname;
         }
         $settings->add(new admin_setting_configselect($name, $title, $description, $default, $options));

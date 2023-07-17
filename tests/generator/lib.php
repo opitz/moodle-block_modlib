@@ -23,19 +23,22 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-
 /**
  * Behat data generator for plugin configuration.
  *
  * @copyright 2020 Matthias Opitz
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class block_modlib_generator extends component_generator_base {
-    public function create_plugin_config($plugin_config) {
+    /**
+     * Create plugin configuration.
+     *
+     * @param array $pluginconfig
+     * @return void
+     * @throws dml_exception
+     */
+    public function create_plugin_config(array $pluginconfig): void {
         global $DB;
-        $DB->insert_record('config_plugins', $plugin_config);
+        $DB->insert_record('config_plugins', $pluginconfig);
     }
 }

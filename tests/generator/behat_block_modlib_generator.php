@@ -23,23 +23,24 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-
 /**
  * Behat data generator for plugin configuration.
  *
  * @copyright 2020 Matthias Opitz
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class behat_block_modlib_generator extends behat_generator_base {
 
+    /**
+     * Get creatable entities.
+     *
+     * @return array[]
+     */
     protected function get_creatable_entities(): array {
         return [
             'plugin configurations' => [
                 'datagenerator' => 'plugin_config',
-                'required' => ['plugin','name','value']
+                'required' => ['plugin', 'name', 'value']
             ],
         ];
     }

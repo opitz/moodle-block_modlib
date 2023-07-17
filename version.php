@@ -18,12 +18,12 @@
  * Version details
  *
  * @package    block_modlib
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @copyright 2023 onwards Matthias Opitz (opitz@gmx.de)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019102400;        // The current plugin version (Date: YYYYMMDDXX)
-//$plugin->requires  = 2019051100;        // Requires this Moodle version
-$plugin->component = 'block_modlib';      // Full name of the plugin (used for diagnostics)
+$plugin->version   = 2023071700;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2019051100;        // Requires this Moodle version.
+$plugin->component = 'block_modlib';      // Full name of the plugin (used for diagnostics).
