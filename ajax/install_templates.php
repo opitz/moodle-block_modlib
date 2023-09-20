@@ -26,6 +26,7 @@ require_once('../../../config.php');
 require_once('../../../course/lib.php');
 
 require_login();
+require_sesskey();
 
 $sectionid = required_param('sectionid', PARAM_INT);
 $type = required_param('type', PARAM_ALPHANUM);

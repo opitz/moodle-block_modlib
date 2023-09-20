@@ -127,7 +127,8 @@ define(['jquery', 'core/config', 'core/str', 'core/modal_factory', 'core/modal_e
                     data: {
                         'sectionid': data.sectionid,
                         'type': data.type,
-                        'payload': data.payload
+                        'payload': data.payload,
+                        'sesskey': M.cfg.sesskey
                     },
                     success: function(result) {
                         $('#modlib-modal-msg').html(result);
